@@ -3,9 +3,11 @@ import { Module } from '@nestjs/common'
 import { ConfigModule } from '@nestjs/config'
 import { GraphQLModule } from '@nestjs/graphql'
 import { TypeOrmModule } from '@nestjs/typeorm'
+import { UserModule } from './users/user.module'
 
 @Module({
     imports: [
+        UserModule,
         ConfigModule.forRoot(),
         TypeOrmModule.forRoot({
             type: 'postgres',
