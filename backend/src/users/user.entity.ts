@@ -54,6 +54,10 @@ export class User {
     @Field(() => [Chat])
     chats: Chat[]
 
+    @OneToMany(() => Chat, chat => chat.owner)
+    @Field(() => [Chat])
+    ownedChats: Chat[]
+
     @OneToMany(() => Message, (message) => message.user)
     @Field(() => [Message])
     messages: Message[]

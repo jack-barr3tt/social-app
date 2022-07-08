@@ -31,7 +31,7 @@ export class ChatService {
         const newChat = new Chat()
         newChat.name = chat.name
         newChat.owner = owner
-        newChat.users = members
+        newChat.users = [owner, ...members]
 
         return this.repo.save(newChat)
     }
@@ -42,7 +42,9 @@ export class ChatService {
             relations: {
                 owner: true,
                 users: true,
-                messages: true,
+                messages: {
+                    user: true
+                },
             },
         })
     }

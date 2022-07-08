@@ -6,6 +6,7 @@ import {
     BeforeUpdate,
     Column,
     Entity,
+    JoinColumn,
     JoinTable,
     ManyToMany,
     ManyToOne,
@@ -45,7 +46,8 @@ export class Chat {
     @Field(() => [User])
     users: User[]
 
-    @ManyToOne(() => User, (user) => user.chats)
+    @ManyToOne(() => User, (user) => user.ownedChats)
+    @JoinColumn()
     @Field(() => User)
     owner: User
 
@@ -54,10 +56,7 @@ export class Chat {
     messages: Message[]
 
     private updateName() {
-        this.name = [
-            this.owner.username,
-            ...this.users.map((user) => user.username),
-        ].join(', ')
+        this.name = this.users.map((user) => user.username).join(', ')
     }
 
     @BeforeInsert()
