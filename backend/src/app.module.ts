@@ -3,11 +3,13 @@ import { Module } from '@nestjs/common'
 import { ConfigModule } from '@nestjs/config'
 import { GraphQLModule } from '@nestjs/graphql'
 import { TypeOrmModule } from '@nestjs/typeorm'
+import { PostModule } from './posts/post.module'
 import { UserModule } from './users/user.module'
 
 @Module({
     imports: [
         UserModule,
+        PostModule,
         ConfigModule.forRoot(),
         TypeOrmModule.forRoot({
             type: 'postgres',

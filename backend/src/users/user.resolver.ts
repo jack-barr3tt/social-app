@@ -13,6 +13,6 @@ export class UserResolver {
 
     @Query(() => User, { nullable: true })
     async user(@Args('id') id: string) {
-        return this.userService.findOne(id)
+        return this.userService.get(id)
     }
 }

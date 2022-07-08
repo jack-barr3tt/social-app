@@ -24,7 +24,7 @@ export class UserService {
         }
     }
 
-    findOne(id: string): Promise<User|null> {
-        return this.repo.findOneBy({ id })
+    get(id: string): Promise<User | null> {
+        return this.repo.findOne({ where: { id }, relations: { posts: true } })
     }
 }

@@ -1,5 +1,6 @@
 import { Field, InputType, ObjectType } from '@nestjs/graphql'
-import { BeforeInsert, Column, Entity, OneToMany, PrimaryColumn } from 'typeorm'
+import { Post } from 'src/posts/post.entity'
+import { BeforeInsert, Column, Entity, ManyToMany, OneToMany, PrimaryColumn } from 'typeorm'
 import { v4 } from 'uuid'
 
 @InputType()
@@ -31,6 +32,14 @@ export class User {
 
     @Column()
     hash!: string
+
+    @OneToMany(() => Post, (post) => post.user)
+    @Field(() => [Post])
+    posts: Post[]
+
+    @ManyToMany(() => Post, (post) => post.likedBy)
+    @Field(() => [Post])
+    likedPosts: Post[]
 
     @BeforeInsert()
     generateId() {
