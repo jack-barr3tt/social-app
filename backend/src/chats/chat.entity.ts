@@ -1,4 +1,5 @@
 import { Field, InputType, ObjectType } from '@nestjs/graphql'
+import { Message } from 'src/messages/message.entity'
 import { User } from 'src/users/user.entity'
 import {
     BeforeInsert,
@@ -8,7 +9,8 @@ import {
     JoinTable,
     ManyToMany,
     ManyToOne,
-    PrimaryColumn,
+    OneToMany,
+    PrimaryColumn
 } from 'typeorm'
 import { v4 } from 'uuid'
 
@@ -46,6 +48,10 @@ export class Chat {
     @ManyToOne(() => User, (user) => user.chats)
     @Field(() => User)
     owner: User
+
+    @OneToMany(() => Message, (message) => message.chat)
+    @Field(() => [Message])
+    messages: Message[]
 
     private updateName() {
         this.name = [

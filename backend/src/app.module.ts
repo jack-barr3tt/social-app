@@ -4,6 +4,7 @@ import { ConfigModule } from '@nestjs/config'
 import { GraphQLModule } from '@nestjs/graphql'
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { ChatModule } from './chats/chat.module'
+import { MessageModule } from './messages/message.module'
 import { PostModule } from './posts/post.module'
 import { UserModule } from './users/user.module'
 
@@ -12,6 +13,7 @@ import { UserModule } from './users/user.module'
         UserModule,
         PostModule,
         ChatModule,
+        MessageModule,
         ConfigModule.forRoot(),
         TypeOrmModule.forRoot({
             type: 'postgres',
@@ -27,6 +29,6 @@ import { UserModule } from './users/user.module'
             driver: ApolloDriver,
             autoSchemaFile: 'schema.gql',
         }),
-    ]
+    ],
 })
 export class AppModule {}

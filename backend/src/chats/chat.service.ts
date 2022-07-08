@@ -42,6 +42,7 @@ export class ChatService {
             relations: {
                 owner: true,
                 users: true,
+                messages: true,
             },
         })
     }

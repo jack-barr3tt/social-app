@@ -27,7 +27,7 @@ export class UserService {
     get(id: string): Promise<User> {
         return this.repo.findOne({
             where: { id },
-            relations: { posts: true, chats: true },
+            relations: { posts: true, chats: true, messages: true },
         })
     }
 }

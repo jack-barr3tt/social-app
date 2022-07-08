@@ -1,5 +1,6 @@
 import { Field, InputType, ObjectType } from '@nestjs/graphql'
 import { Chat } from 'src/chats/chat.entity'
+import { Message } from 'src/messages/message.entity'
 import { Post } from 'src/posts/post.entity'
 import {
     BeforeInsert,
@@ -52,6 +53,10 @@ export class User {
     @ManyToMany(() => Chat, (chat) => chat.users)
     @Field(() => [Chat])
     chats: Chat[]
+
+    @OneToMany(() => Message, (message) => message.user)
+    @Field(() => [Message])
+    messages: Message[]
 
     @BeforeInsert()
     generateId() {
