@@ -24,7 +24,10 @@ export class UserService {
         }
     }
 
-    get(id: string): Promise<User | null> {
-        return this.repo.findOne({ where: { id }, relations: { posts: true } })
+    get(id: string): Promise<User> {
+        return this.repo.findOne({
+            where: { id },
+            relations: { posts: true, chats: true },
+        })
     }
 }

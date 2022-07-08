@@ -26,7 +26,7 @@ export class PostResolver {
         return this.postService.delete(id)
     }
 
-    @Query(() => Post)
+    @Query(() => Post, { nullable: true })
     post(@Args('id') id: string) {
         return this.postService.get(id)
     }
