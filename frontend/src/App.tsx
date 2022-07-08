@@ -11,7 +11,9 @@ function App() {
 	return (
 		<ApolloProvider client={client}>
 			<UserProvider>
-				<Router />
+				<div className="p-8 h-full">
+					<Router />
+				</div>
 			</UserProvider>
 		</ApolloProvider>
 	)

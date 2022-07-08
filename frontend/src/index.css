@@ -1,6 +1,34 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,300;0,400;0,700;0,800;0,900;1,500&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+html, body, #root {
+    height: 100vh;
+}
+
+* {
+    font-family: 'Nunito', sans-serif;
+}
+
+h2 {
+    font-weight: 800;
+    font-size: 2rem;
+}
+
 @layer components {
+    .button {
+        @apply p-4 border border-gray-400 rounded-lg
+        transition-all duration-300
+        hover:bg-gray-100
+    }
+
+    .iconButton {
+        @apply button hover:scale-105
+    }
+
+    .input {
+        @apply border border-gray-400 p-2 rounded-lg w-full h-12
+    }
 }
