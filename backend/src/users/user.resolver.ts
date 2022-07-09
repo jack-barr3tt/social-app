@@ -11,6 +11,11 @@ export class UserResolver {
         return this.userService.create(input)
     }
 
+    @Mutation(() => String)
+    async unfriend(@Args('userId') userId: string, @Args('friendId') friendId: string) {
+        return this.userService.unfriend(userId, friendId)
+    }
+
     @Query(() => User, { nullable: true })
     async user(@Args('id') id: string) {
         return this.userService.get(id)

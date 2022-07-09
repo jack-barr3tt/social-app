@@ -27,7 +27,46 @@ export class UserService {
     get(id: string): Promise<User> {
         return this.repo.findOne({
             where: { id },
-            relations: { posts: true, chats: true, messages: true },
+            relations: {
+                posts: true,
+                chats: true,
+                messages: true,
+                friends: true,
+                sentFriendRequests: true,
+                receivedFriendRequests: true,
+            },
         })
+    }
+
+    async unfriend(userId: string, friendId: string): Promise<string> {
+        if (userId === friendId) {
+            throw new Error('You cannot unfriend yourself')
+        }
+
+        const [user, friend] = await Promise.all([
+            this.repo.findOne({
+                where: { id: userId },
+                relations: { friends: true },
+            }),
+            this.repo.findOne({
+                where: { id: friendId },
+                relations: { friends: true },
+            }),
+        ])
+
+        if (!user || !friend) {
+            throw new Error('User not found')
+        }
+
+        if (!user.friends.some((friend) => friend.id === friendId)) {
+            throw new Error('User is not your friend')
+        }
+
+        user.friends = user.friends.filter((friend) => friend.id !== friendId)
+        friend.friends = friend.friends.filter((friend) => friend.id !== userId)
+
+        await Promise.all([this.repo.save(user), this.repo.save(friend)])
+
+        return 'Successfully unfriended'
     }
 }

@@ -4,6 +4,7 @@ import { ConfigModule } from '@nestjs/config'
 import { GraphQLModule } from '@nestjs/graphql'
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { ChatModule } from './chats/chat.module'
+import { FriendRequestModule } from './friendrequests/request.module'
 import { MessageModule } from './messages/message.module'
 import { PostModule } from './posts/post.module'
 import { UserModule } from './users/user.module'
@@ -14,6 +15,7 @@ import { UserModule } from './users/user.module'
         PostModule,
         ChatModule,
         MessageModule,
+        FriendRequestModule,
         ConfigModule.forRoot(),
         TypeOrmModule.forRoot({
             type: 'postgres',

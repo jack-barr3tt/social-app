@@ -1,11 +1,13 @@
 import { Field, InputType, ObjectType } from '@nestjs/graphql'
 import { Chat } from 'src/chats/chat.entity'
+import { FriendRequest } from 'src/friendrequests/request.entity'
 import { Message } from 'src/messages/message.entity'
 import { Post } from 'src/posts/post.entity'
 import {
     BeforeInsert,
     Column,
     Entity,
+    JoinTable,
     ManyToMany,
     OneToMany,
     PrimaryColumn,
@@ -61,6 +63,19 @@ export class User {
     @OneToMany(() => Message, (message) => message.user)
     @Field(() => [Message])
     messages: Message[]
+
+    @ManyToMany(() => User, (user) => user.friends)
+    @JoinTable()
+    @Field(() => [User])
+    friends: User[]
+
+    @OneToMany(() => FriendRequest, request => request.sender)
+    @Field(() => [FriendRequest])
+    sentFriendRequests: FriendRequest[]
+
+    @OneToMany(() => FriendRequest, request => request.receiver)
+    @Field(() => [FriendRequest])
+    receivedFriendRequests: FriendRequest[]
 
     @BeforeInsert()
     generateId() {
