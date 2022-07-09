@@ -4,8 +4,10 @@
 @tailwind components;
 @tailwind utilities;
 
-html, body, #root {
-    height: 100%;
+html,
+body,
+#root {
+	height: 100%;
 }
 
 * {
@@ -18,10 +20,13 @@ h2 {
 }
 
 @layer components {
+	.greySurface {
+		@apply border-gray-400 hover:bg-gray-100;
+	}
+
 	.button {
-		@apply p-4 border border-gray-400 rounded-lg
-        transition-all duration-300
-        hover:bg-gray-100;
+		@apply p-4 border  rounded-lg
+        transition-all duration-300;
 	}
 
 	.iconButton {

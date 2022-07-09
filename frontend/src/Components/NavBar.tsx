@@ -9,7 +9,7 @@ export default function NavBar() {
 	return (
 		<>
 			<div className="fixed top-0 left-0 w-full py-4 px-8 flex flex-row justify-between items-center h-20">
-				<div className="iconButton" onClick={() => navigate("/")}>
+				<div className="greySurface iconButton" onClick={() => navigate("/")}>
 					<FiHome size="12" />
 				</div>
 				<form className="w-1/3">
@@ -20,7 +20,7 @@ export default function NavBar() {
 						onChange={(e) => setSearch(e.target.value)}
 					/>
 				</form>
-				<div className="iconButton" onClick={() => navigate("/messages")}>
+				<div className="greySurface iconButton" onClick={() => navigate("/messages")}>
 					<FiMessageSquare size="12" />
 				</div>
 			</div>
