@@ -4,13 +4,13 @@ import { useNavigate } from "react-router-dom"
 
 export default function NavBar() {
 	const [search, setSearch] = useState<string>()
-    const navigate = useNavigate()
+	const navigate = useNavigate()
 
 	return (
 		<>
 			<div className="fixed top-0 left-0 w-full py-4 px-8 flex flex-row justify-between items-center h-20">
 				<div className="iconButton" onClick={() => navigate("/")}>
-					<FiHome />
+					<FiHome size="12" />
 				</div>
 				<form className="w-1/3">
 					<input
@@ -21,10 +21,10 @@ export default function NavBar() {
 					/>
 				</form>
 				<div className="iconButton" onClick={() => navigate("/messages")}>
-					<FiMessageSquare />
+					<FiMessageSquare size="12" />
 				</div>
 			</div>
-			<div className="p-10" />
+			<div className="flex-none p-10" />
 		</>
 	)
 }

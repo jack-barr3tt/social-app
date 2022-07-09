@@ -3,7 +3,7 @@ import { UserProvider } from "./Hooks/useUser"
 import Router from "./Router"
 
 const client = new ApolloClient({
-	uri: "http://localhost:3000/graphql",
+	uri: "http://192.168.0.98:3000/graphql",
 	cache: new InMemoryCache(),
 })
 
@@ -11,7 +11,7 @@ function App() {
 	return (
 		<ApolloProvider client={client}>
 			<UserProvider>
-				<div className="p-8 h-full">
+				<div className="p-8 h-full flex flex-col">
 					<Router />
 				</div>
 			</UserProvider>
