@@ -19,4 +19,9 @@ export class FriendRequestResolver {
     async rejectFriendRequest(@Args("id") id: string) {
         return this.frService.rejectFriendRequest(id);
     }
+
+    @Mutation(() => String)
+    async revokeFriendRequest(@Args("id") id: string) {
+        return this.frService.revokeFriendRequest(id);
+    }
 }

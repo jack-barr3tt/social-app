@@ -117,4 +117,18 @@ export class FriendRequestService {
 
         return 'Friend request rejected'
     }
+
+    async revokeFriendRequest(id: string): Promise<string> {
+        const request = await this.repo.findOne({
+            where: { id },
+        })
+
+        if (!request) {
+            throw new Error('Friend request not found')
+        }
+
+        await this.repo.remove(request)
+
+        return 'Friend request revoked'
+    }
 }
