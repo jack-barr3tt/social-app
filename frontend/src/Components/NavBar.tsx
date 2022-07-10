@@ -1,27 +1,24 @@
-import { useState } from "react"
-import { FiHome, FiMessageSquare } from "react-icons/fi"
+import { FiHome, FiMessageSquare, FiUsers } from "react-icons/fi"
 import { useNavigate } from "react-router-dom"
+import SearchBar from "./SearchBar"
 
 export default function NavBar() {
-	const [search, setSearch] = useState<string>()
 	const navigate = useNavigate()
 
 	return (
 		<>
 			<div className="fixed top-0 left-0 w-full py-4 px-8 flex flex-row justify-between items-center h-20">
-				<div className="greySurface iconButton" onClick={() => navigate("/")}>
+				<div className="greySurface iconButton mr-16" onClick={() => navigate("/")}>
 					<FiHome size="12" />
 				</div>
-				<form className="w-1/3">
-					<input
-						className="input"
-						placeholder="Search for a user..."
-						value={search}
-						onChange={(e) => setSearch(e.target.value)}
-					/>
-				</form>
-				<div className="greySurface iconButton" onClick={() => navigate("/messages")}>
-					<FiMessageSquare size="12" />
+				<SearchBar />
+				<div className="flex flex-row gap-4">
+					<div className="greySurface iconButton" onClick={() => navigate("/friends")}>
+						<FiUsers size="12" />
+					</div>
+					<div className="greySurface iconButton" onClick={() => navigate("/chats")}>
+						<FiMessageSquare size="12" />
+					</div>
 				</div>
 			</div>
 			<div className="flex-none p-10" />
