@@ -31,7 +31,8 @@ export class ChatService {
         const newChat = new Chat()
         newChat.name = chat.name
         newChat.owner = owner
-        newChat.users = [owner, ...members]
+        newChat.users = members
+        if(!newChat.users.some(u => u.id === newChat.owner.id)) newChat.users.push(owner)
 
         return this.repo.save(newChat)
     }
