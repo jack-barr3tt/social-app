@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { Repository } from 'typeorm'
+import { Repository, Like } from 'typeorm'
 import { User, UserInput } from './user.entity'
 import { hash } from 'bcrypt'
 
@@ -32,8 +32,14 @@ export class UserService {
                 chats: true,
                 messages: true,
                 friends: true,
-                sentFriendRequests: true,
-                receivedFriendRequests: true,
+                sentFriendRequests: {
+                    sender: true,
+                    receiver: true
+                },
+                receivedFriendRequests: {
+                    sender: true,
+                    receiver: true
+                },
             },
         })
     }
@@ -68,5 +74,13 @@ export class UserService {
         await Promise.all([this.repo.save(user), this.repo.save(friend)])
 
         return 'Successfully unfriended'
+    }
+
+    search(query: string) {
+        return this.repo.find({
+            where: {
+                username: Like(`%${query}%`)
+            },
+        })
     }
 }

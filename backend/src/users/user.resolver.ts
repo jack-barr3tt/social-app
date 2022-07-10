@@ -20,4 +20,9 @@ export class UserResolver {
     async user(@Args('id') id: string) {
         return this.userService.get(id)
     }
+
+    @Query(() => [User])
+    async search(@Args('query') query: string) {
+        return this.userService.search(query)
+    }
 }
