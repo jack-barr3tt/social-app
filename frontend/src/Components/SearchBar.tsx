@@ -20,8 +20,17 @@ export default function SearchBar() {
 						id
 					}
 					sentFriendRequests {
+						id
 						receiver {
 							id
+							username
+						}
+					}
+					receivedFriendRequests {
+						id
+						sender {
+							id
+							username
 						}
 					}
 					chats {
@@ -49,7 +58,7 @@ export default function SearchBar() {
 		`,
 		{
 			variables: {
-				query: "" + query,
+				query
 			},
 		}
 	)
