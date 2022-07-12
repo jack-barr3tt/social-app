@@ -1,4 +1,4 @@
-import { useMutation } from "@apollo/client"
+import { useLazyQuery, useMutation, useQuery } from "@apollo/client"
 import { useState } from "react"
 import { FiEdit3, FiLogOut, FiSettings, FiTrash2 } from "react-icons/fi"
 import { useNavigate } from "react-router-dom"
@@ -7,9 +7,10 @@ import { useUser } from "../Hooks/useUser"
 import { DELETE_CHAT, LEAVE_CHAT } from "../GQL/mutations"
 import ManageChatMembersModal from "./ManageChatMembersModal"
 import RenameChatModal from "./RenameChatModal"
+import { CHAT_OWNER_ID, GET_CHAT_IDS } from "../GQL/queries"
 
-export default function ChatControls(props: { chat: Chat; refetchChat: () => void }) {
-	const { chat, refetchChat } = props
+export default function ChatControls(props: { id: string }) {
+	const { id } = props
 
 	const navigate = useNavigate()
 
@@ -18,43 +19,35 @@ export default function ChatControls(props: { chat: Chat; refetchChat: () => voi
 	const [editOpen, setEditOpen] = useState(false)
 	const [manageOpen, setManageOpen] = useState(false)
 
-	const [deleteChat] = useMutation(DELETE_CHAT)
+	const refetch = {
+		refetchQueries: [{ query: GET_CHAT_IDS, variables: { id: userId } }],
+	}
 
-	const [leaveChat] = useMutation(LEAVE_CHAT)
+	const [deleteChat] = useMutation(DELETE_CHAT, refetch)
+	const [leaveChat] = useMutation(LEAVE_CHAT, refetch)
+
+	const { data: { chat } = {} } = useQuery<{ chat: Chat }>(CHAT_OWNER_ID, {
+		variables: { id },
+	})
 
 	const handleDelete = async () => {
-		await deleteChat({ variables: { id: chat.id } })
+		await deleteChat({ variables: { id } })
 
 		navigate("/chats")
-
-		refetchChat()
 	}
 
 	const handleLeave = async () => {
-		await leaveChat({ variables: { id: chat.id, userId } })
+		await leaveChat({ variables: { id, userId } })
 
 		navigate("/chats")
-
-		refetchChat()
 	}
 
 	return (
 		<>
-			<RenameChatModal
-				open={editOpen}
-				setOpen={setEditOpen}
-				id={chat.id || ""}
-				currentName={chat.name}
-				onSubmit={() => refetchChat()}
-			/>
-			<ManageChatMembersModal
-				open={manageOpen}
-				setOpen={setManageOpen}
-				id={chat.id}
-				onSubmit={() => refetchChat()}
-			/>
+			<RenameChatModal open={editOpen} setOpen={setEditOpen} id={id} />
+			<ManageChatMembersModal open={manageOpen} setOpen={setManageOpen} id={id} />
 			<div className="flex flex-row gap-2">
-				{chat.owner.id === userId ? (
+				{chat?.owner.id === userId ? (
 					<>
 						<div className="greySurface iconButton" onClick={() => setEditOpen(true)}>
 							<FiEdit3 />

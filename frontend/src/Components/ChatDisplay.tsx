@@ -1,9 +1,13 @@
+import { useQuery } from "@apollo/client"
 import { useNavigate } from "react-router-dom"
+import { CHAT_NAME } from "../GQL/queries"
 import { Chat } from "../graphql"
 import ChatControls from "./ChatControls"
 
-export default function ChatDisplay(props: { chat: Chat; refresh: () => void }) {
-	const { chat, refresh } = props
+export default function ChatDisplay(props: { id: string }) {
+	const { id } = props
+
+	const { data: { chat } = {} } = useQuery<{ chat: Chat }>(CHAT_NAME, { variables: { id } })
 
 	const navigate = useNavigate()
 
@@ -11,12 +15,12 @@ export default function ChatDisplay(props: { chat: Chat; refresh: () => void }) 
 		<div className="border border-grey-400 rounded-lg flex flex-row items-center">
 			<div
 				className="grow h-full rounded-lg flex flex-row items-center pl-4"
-				onClick={() => navigate(chat.id)}
+				onClick={() => navigate(id)}
 			>
-				<h3>{chat.name}</h3>
+				<h3>{chat?.name}</h3>
 			</div>
 			<div className="p-2">
-				<ChatControls chat={chat} refetchChat={refresh} />
+				<ChatControls id={id} />
 			</div>
 		</div>
 	)

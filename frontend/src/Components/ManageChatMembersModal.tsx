@@ -12,21 +12,21 @@ export default function ManageChatMembersModal(props: {
 	open: boolean
 	setOpen: Dispatch<SetStateAction<boolean>>
 	id: string
-	onSubmit: () => void
 }) {
-	const { open, setOpen, id, onSubmit } = props
+	const { open, setOpen, id } = props
 
 	const { userId } = useUser()
 
 	const { data: { chat } = {} } = useQuery<{ chat: Chat }>(
 		gql`
-            ${CHAT_MEMBERS}
-            query GetChat($id: String!) {
-		        chat(id: $id) {
-                    ...ChatMemberIDs
-                }
-            }
-        `,
+			${CHAT_MEMBERS}
+			query GetChat($id: String!) {
+				chat(id: $id) {
+					id
+					...ChatMemberIDs
+				}
+			}
+		`,
 		{
 			variables: {
 				id,
@@ -39,6 +39,7 @@ export default function ManageChatMembersModal(props: {
 			${FRIENDS}
 			query GetUser($userId: String!) {
 				user(id: $userId) {
+					id
 					...Friends
 				}
 			}
@@ -63,7 +64,6 @@ export default function ManageChatMembersModal(props: {
 	}
 
 	useEffect(() => {
-		console.log(chat)
 		if (chat) setSelected(chat.users.map((user) => user.id))
 	}, [chat])
 
@@ -78,7 +78,6 @@ export default function ManageChatMembersModal(props: {
 		})
 
 		setOpen(false)
-		onSubmit()
 	}
 
 	return (

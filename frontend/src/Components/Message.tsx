@@ -1,19 +1,23 @@
 import { useUser } from "../Hooks/useUser"
-import { Message as MessageType } from "../graphql"
+import { Message as APIMessage } from "../graphql"
 import { format, isSameMinute, isToday } from "date-fns"
 import { useCallback, useEffect, useState } from "react"
+import { useQuery } from "@apollo/client"
+import { MESSAGE } from "../GQL/queries"
 
-export default function Message(props: {
-	message: MessageType
-	group: boolean
-	showTime: boolean
-}) {
-	const { message, group, showTime } = props
+export default function Message(props: { id: string; group: boolean; showTime: boolean }) {
+	const { id, group, showTime } = props
 	const { userId } = useUser()
 
-	const isOwnMessage = message.user.id === userId
+	const { data: { message } = {} } = useQuery<{ message: APIMessage }>(MESSAGE, {
+		variables: { id },
+	})
+
+	const isOwnMessage = message && message.user.id === userId
 
 	const calculateTime = useCallback(() => {
+		if (!message) return ""
+
 		const created = new Date(message.createdAt)
 
 		if (isSameMinute(new Date(), created)) {
@@ -34,6 +38,8 @@ export default function Message(props: {
 		}, 1000)
 		return () => clearInterval(interval)
 	}, [])
+
+	if (!message) return <></>
 
 	return (
 		<div className={`w-full flex flex-row ${isOwnMessage ? "justify-end" : "justify-start"}`}>

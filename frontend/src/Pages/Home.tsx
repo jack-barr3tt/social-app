@@ -9,6 +9,7 @@ export default function Home() {
 		gql`
 			query GetUser($userId: String!) {
 				user(id: $userId) {
+					id
 					username
 				}
 			}

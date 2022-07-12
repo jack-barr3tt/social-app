@@ -1,4 +1,4 @@
-import { gql, useMutation, useQuery } from "@apollo/client"
+import { useMutation, useQuery } from "@apollo/client"
 import { isSameDay } from "date-fns"
 import { FormEvent, useEffect, useRef, useState } from "react"
 import { FiSend } from "react-icons/fi"
@@ -7,8 +7,8 @@ import ChatControls from "../Components/ChatControls"
 import Message from "../Components/Message"
 import MessageDateSep from "../Components/MessageDateSep"
 import Title from "../Components/Title"
-import { BASIC_CHAT_INFO } from "../GQL/fragments"
 import { SEND_MESSAGE } from "../GQL/mutations"
+import { GET_CHAT } from "../GQL/queries"
 import { Chat as ChatType, Message as MessageType } from "../graphql"
 import { useUser } from "../Hooks/useUser"
 
@@ -18,36 +18,15 @@ export default function Chat() {
 		data: { chat } = {},
 		loading,
 		error,
-		refetch,
-	} = useQuery<{ chat: ChatType }>(
-		gql`
-            ${BASIC_CHAT_INFO}
-			query GetChat($chatId: String!) {
-				chat(id: $chatId) {
-                    id
-                    ...BasicChatInfo
-					messages {
-						user {
-							id
-							username
-						}
-						content
-						createdAt
-					}
-					users {
-						id
-					}
-				}
-			}
-		`,
-		{
-			variables: {
-				chatId: id,
-			},
-		}
-	)
+	} = useQuery<{ chat: ChatType }>(GET_CHAT, {
+		variables: {
+			chatId: id,
+		},
+	})
 
-	const [sendMutation] = useMutation<MessageType>(SEND_MESSAGE)
+	const [sendMutation] = useMutation<MessageType>(SEND_MESSAGE, {
+		refetchQueries: [{ query: GET_CHAT, variables: { id: id } }],
+	})
 
 	const { userId } = useUser()
 
@@ -67,16 +46,12 @@ export default function Chat() {
 			},
 		})
 
-		await refetch()
-
-		if (scrollRef && scrollRef.current) scrollRef.current.scrollIntoView({ behavior: "smooth" })
-
 		setMessage("")
 	}
 
 	useEffect(() => {
 		if (scrollRef && scrollRef.current) scrollRef.current.scrollIntoView({ behavior: "smooth" })
-	}, [scrollRef])
+	}, [scrollRef, chat])
 
 	return (
 		<>
@@ -86,7 +61,7 @@ export default function Chat() {
 				<>
 					<Title>
 						{chat.name}
-						<ChatControls chat={chat} refetchChat={() => refetch()} />
+						<ChatControls id={id || ""} />
 					</Title>
 					<div className="flex flex-col gap-2 p-8 grow overflow-x-auto">
 						{[...chat.messages]
@@ -102,7 +77,7 @@ export default function Chat() {
 
 								const messageComponent = (
 									<Message
-										message={m}
+										id={m.id}
 										group={chat.users.length > 2}
 										key={m.id}
 										showTime={showTime}

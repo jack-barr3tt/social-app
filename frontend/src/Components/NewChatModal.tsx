@@ -1,13 +1,14 @@
-import { gql, useMutation, useQuery } from "@apollo/client"
+import { gql, useLazyQuery, useMutation, useQuery } from "@apollo/client"
 import { Dispatch, FormEvent, SetStateAction, useCallback, useState } from "react"
 import { FiCheck } from "react-icons/fi"
 import { useNavigate } from "react-router-dom"
 import { CREATE_CHAT } from "../GQL/mutations"
-import { FRIENDS, USER_CHAT_MEMBERS } from "../GQL/fragments"
+import { FRIENDS } from "../GQL/fragments"
 import { Chat, User } from "../graphql"
 import { useUser } from "../Hooks/useUser"
 import Modal from "./Modal"
 import Title from "./Title"
+import { GET_CHAT_IDS } from "../GQL/queries"
 
 export default function NewChatModal(props: {
 	open: boolean
@@ -25,11 +26,10 @@ export default function NewChatModal(props: {
 	} = useQuery<{ user: User }>(
 		gql`
 			${FRIENDS}
-			${USER_CHAT_MEMBERS}
 			query GetUser($userId: String!) {
 				user(id: $userId) {
+					id
 					...Friends
-					...UserChatMembers
 				}
 			}
 		`,
@@ -40,7 +40,11 @@ export default function NewChatModal(props: {
 		}
 	)
 
-	const [createGroupChat] = useMutation<{ createChat: Chat }>(CREATE_CHAT)
+	const refetch = {
+		refetchQueries: [{ query: GET_CHAT_IDS, variables: { id: userId } }],
+	}
+
+	const [createChat] = useMutation<{ createChat: Chat }>(CREATE_CHAT, refetch)
 
 	const [selected, setSelected] = useState<string[]>([])
 	const [name, setName] = useState("")
@@ -56,10 +60,10 @@ export default function NewChatModal(props: {
 		[selected]
 	)
 
-	const createChat = async (e: FormEvent<HTMLFormElement>) => {
+	const handleCreateChat = async (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault()
 
-		const { data } = await createGroupChat({
+		const { data } = await createChat({
 			variables: {
 				ownerId: userId,
 				userIds: selected,
@@ -75,7 +79,7 @@ export default function NewChatModal(props: {
 			<Title>New Chat</Title>
 			{loading && <p>Loading...</p>}
 			{error && <p>{"Error: " + error}</p>}
-			<form className="flex flex-col gap-4 pt-4" onSubmit={createChat}>
+			<form className="flex flex-col gap-4 pt-4" onSubmit={handleCreateChat}>
 				<input
 					className="input"
 					placeholder="Name your chat..."

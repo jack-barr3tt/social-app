@@ -1,36 +1,45 @@
-import { useMutation } from "@apollo/client"
-import { Dispatch, SetStateAction, useState } from "react"
+import { useMutation, useQuery } from "@apollo/client"
+import { Dispatch, SetStateAction, useEffect, useState } from "react"
 import { FiSave } from "react-icons/fi"
 import { EDIT_CHAT_NAME } from "../GQL/mutations"
+import { CHAT_NAME } from "../GQL/queries"
+import { Chat } from "../graphql"
 import Modal from "./Modal"
 import Title from "./Title"
 
 export default function RenameChatModal(props: {
 	open: boolean
-	setOpen: Dispatch<SetStateAction<boolean>>,
-    id: string,
-    currentName: string,
-    onSubmit: () => void
+	setOpen: Dispatch<SetStateAction<boolean>>
+	id: string
 }) {
-	const { open, setOpen, id, currentName, onSubmit } = props
+	const { open, setOpen, id } = props
 
-	const [name, setName] = useState(currentName)
+	const { data: { chat } = {} } = useQuery<{ chat: Chat }>(CHAT_NAME, {
+		variables: { id },
+	})
 
-	const [editName] = useMutation(EDIT_CHAT_NAME)
+	const [name, setName] = useState<string>()
 
-    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault()
+	useEffect(() => {
+		if (chat) setName(chat.name)
+	}, [chat])
 
-        await editName({
-            variables: {
-                id,
-                name
-            }
-        })
+	const [editName] = useMutation(EDIT_CHAT_NAME, {
+		refetchQueries: [{ query: CHAT_NAME, variables: { id } }],
+	})
 
-        setOpen(false)
-        onSubmit()
-    }
+	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+		e.preventDefault()
+
+		await editName({
+			variables: {
+				id,
+				name,
+			},
+		})
+
+		setOpen(false)
+	}
 
 	return (
 		<Modal open={open} setOpen={setOpen}>
