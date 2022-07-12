@@ -52,6 +52,12 @@ export class ChatService {
     }
 
     async delete(id: string): Promise<string> {
+        const chat = await this.repo.findOne({
+            where: { id },
+        })
+
+        if (!chat) throw new Error('Chat not found')
+
         await this.repo.delete({ id })
 
         return 'Chat deleted'

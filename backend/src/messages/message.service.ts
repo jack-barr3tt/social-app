@@ -52,7 +52,9 @@ export class MessageService {
             relations: { chat: true, user: true },
         })
 
-        this.messageRepository.remove(deletedMessage)
+        if (!deletedMessage) throw new Error('Message not found')
+
+        this.messageRepository.delete({ id })
 
         return 'Message deleted'
     }
