@@ -22,7 +22,9 @@ export default function Chats() {
 			query GetChats($userId: String!) {
 				user(id: $userId) {
 					id
-					...BasicChatInfo
+					chats {
+						...BasicChatInfo
+					}
 				}
 			}
 		`,

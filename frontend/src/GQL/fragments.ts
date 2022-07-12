@@ -7,6 +7,7 @@ export const CHAT_MEMBERS = gql`
 		}
 	}
 `
+
 export const FRIENDS = gql`
 	fragment Friends on User {
 		friends {
@@ -34,6 +35,7 @@ export const USER_CHAT_MEMBERS = gql`
 		}
 	}
 `
+
 export const FRIEND_REQUESTS = gql`
 	fragment FriendRequests on User {
 		sentFriendRequests {
@@ -55,18 +57,17 @@ export const FRIEND_REQUESTS = gql`
 
 export const BASIC_CHAT_INFO = gql`
 	fragment BasicChatInfo on Chat {
-		chats {
+		id
+		name
+		owner {
 			id
-			name
-			owner {
-				id
-			}
 		}
 	}
 `
+
 export const BASIC_USER_INFO = gql`
-    fragment BasicUserInfo on User {
-        id
-        username
-    }
+	fragment BasicUserInfo on User {
+		id
+		username
+	}
 `

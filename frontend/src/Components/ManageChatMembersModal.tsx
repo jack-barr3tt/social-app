@@ -21,9 +21,9 @@ export default function ManageChatMembersModal(props: {
 	const { data: { chat } = {} } = useQuery<{ chat: Chat }>(
 		gql`
             ${CHAT_MEMBERS}
-            GetChat($id: String!) {
+            query GetChat($id: String!) {
 		        chat(id: $id) {
-                    ...ChatMemeberIDs
+                    ...ChatMemberIDs
                 }
             }
         `,
