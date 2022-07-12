@@ -9,8 +9,8 @@ export default function Title(props: { children: ReactNode }) {
 		if (Array.isArray(child)) return child.map(getEl)
 		if (canBeText(child)) return <h2>{child}</h2>
 		const childEl = child as ReactElement
-		if (childEl.props.children.length > 1) return getEl(childEl.props.children)
-		return child
+        if(!childEl.props.children) return child
+		return getEl(childEl.props.children)
 	}
 
 	return (
