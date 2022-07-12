@@ -29,7 +29,10 @@ export class UserService {
             where: { id },
             relations: {
                 posts: true,
-                chats: true,
+                chats: {
+                    users: true,
+                    owner: true
+                },
                 messages: true,
                 friends: true,
                 sentFriendRequests: {

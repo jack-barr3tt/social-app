@@ -45,7 +45,7 @@ export class ChatService {
                 owner: true,
                 users: true,
                 messages: {
-                    user: true
+                    user: true,
                 },
             },
         })
@@ -55,5 +55,64 @@ export class ChatService {
         await this.repo.delete({ id })
 
         return 'Chat deleted'
+    }
+
+    async leave(id: string, userId: string): Promise<string> {
+        const chat = await this.repo.findOne({
+            where: { id },
+            relations: { users: true },
+        })
+
+        if (!chat) throw new Error('Chat not found')
+        if (!chat.users.some((u) => u.id === userId))
+            throw new Error('User not in chat')
+
+        chat.users = chat.users.filter((u) => u.id !== userId)
+        if (!chat.nameOverriden) chat.updateName()
+
+        await this.repo.save(chat)
+
+        return 'User left chat'
+    }
+
+    async rename(id: string, name: string): Promise<string> {
+        const chat = await this.repo.findOne({
+            where: { id },
+            relations: { users: true },
+        })
+
+        if (!chat) throw new Error('Chat not found')
+        chat.name = name
+
+        await this.repo.save(chat)
+
+        return 'Renamed chat'
+    }
+
+    async editMembers(id: string, userIds: string[]): Promise<string> {
+        const chat = await this.repo.findOne({
+            where: { id },
+            relations: { users: true },
+        })
+
+        if (!chat) throw new Error('Chat not found')
+
+        const members = await Promise.all(
+            userIds.map((userId) => {
+                try {
+                    return this.userRepo.findOne({ where: { id: userId } })
+                } catch {
+                    throw new Error(`Invalid user id: ${userId}`)
+                }
+            }),
+        )
+
+        chat.users = members
+
+        if (!chat.nameOverriden) chat.updateName()
+
+        await this.repo.save(chat)
+
+        return 'Members updated'
     }
 }

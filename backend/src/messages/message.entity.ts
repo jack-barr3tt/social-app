@@ -49,7 +49,7 @@ export class Message {
     @Field(() => User)
     user: User
 
-    @ManyToOne(() => Chat, (chat) => chat.messages)
+    @ManyToOne(() => Chat, (chat) => chat.messages, { onDelete: "CASCADE" })
     @JoinColumn()
     @Field(() => Chat)
     chat: Chat

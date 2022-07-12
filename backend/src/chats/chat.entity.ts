@@ -3,7 +3,6 @@ import { Message } from 'src/messages/message.entity'
 import { User } from 'src/users/user.entity'
 import {
     BeforeInsert,
-    BeforeUpdate,
     Column,
     Entity,
     JoinColumn,
@@ -11,7 +10,7 @@ import {
     ManyToMany,
     ManyToOne,
     OneToMany,
-    PrimaryColumn
+    PrimaryColumn,
 } from 'typeorm'
 import { v4 } from 'uuid'
 
@@ -22,6 +21,15 @@ export class ChatInput {
 
     @Field(() => String)
     ownerId: string
+
+    @Field(() => [String])
+    userIds: string[]
+}
+
+@InputType()
+export class ChatMemberEditInput {
+    @Field(() => String)
+    id: string
 
     @Field(() => [String])
     userIds: string[]
@@ -55,7 +63,7 @@ export class Chat {
     @Field(() => [Message])
     messages: Message[]
 
-    private updateName() {
+    updateName() {
         this.name = this.users.map((user) => user.username).join(', ')
     }
 
@@ -64,11 +72,6 @@ export class Chat {
         this.id = v4()
         if (!this.name) this.updateName()
         else this.nameOverriden = true
-    }
-
-    @BeforeUpdate()
-    updateNameIfNeeded() {
-        if (!this.nameOverriden) this.updateName()
     }
 }
 
