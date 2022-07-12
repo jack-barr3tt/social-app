@@ -1,6 +1,7 @@
-import { gql, useMutation } from "@apollo/client"
+import { useMutation } from "@apollo/client"
 import { Dispatch, SetStateAction, useState } from "react"
 import { FiSave } from "react-icons/fi"
+import { EDIT_CHAT_NAME } from "../GQL/mutations"
 import Modal from "./Modal"
 import Title from "./Title"
 
@@ -15,11 +16,7 @@ export default function RenameChatModal(props: {
 
 	const [name, setName] = useState(currentName)
 
-	const [editName] = useMutation(gql`
-		mutation EditName($id: String!, $name: String!) {
-			renameChat(id: $id, name: $name)
-		}
-	`)
+	const [editName] = useMutation(EDIT_CHAT_NAME)
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()

@@ -7,6 +7,8 @@ import ChatControls from "../Components/ChatControls"
 import Message from "../Components/Message"
 import MessageDateSep from "../Components/MessageDateSep"
 import Title from "../Components/Title"
+import { BASIC_CHAT_INFO } from "../GQL/fragments"
+import { SEND_MESSAGE } from "../GQL/mutations"
 import { Chat as ChatType, Message as MessageType } from "../graphql"
 import { useUser } from "../Hooks/useUser"
 
@@ -19,10 +21,11 @@ export default function Chat() {
 		refetch,
 	} = useQuery<{ chat: ChatType }>(
 		gql`
+            ${BASIC_CHAT_INFO}
 			query GetChat($chatId: String!) {
 				chat(id: $chatId) {
                     id
-					name
+                    ...BasicChatInfo
 					messages {
 						user {
 							id
@@ -32,9 +35,6 @@ export default function Chat() {
 						createdAt
 					}
 					users {
-						id
-					}
-					owner {
 						id
 					}
 				}
@@ -47,14 +47,7 @@ export default function Chat() {
 		}
 	)
 
-	const [sendMutation] = useMutation<MessageType>(gql`
-		mutation SendMessage($userId: String!, $chatId: String!, $content: String!) {
-			createMessage(message: { userId: $userId, chatId: $chatId, content: $content }) {
-				id
-				content
-			}
-		}
-	`)
+	const [sendMutation] = useMutation<MessageType>(SEND_MESSAGE)
 
 	const { userId } = useUser()
 

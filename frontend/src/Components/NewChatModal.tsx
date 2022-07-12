@@ -2,6 +2,8 @@ import { gql, useMutation, useQuery } from "@apollo/client"
 import { Dispatch, FormEvent, SetStateAction, useCallback, useState } from "react"
 import { FiCheck } from "react-icons/fi"
 import { useNavigate } from "react-router-dom"
+import { CREATE_CHAT } from "../GQL/mutations"
+import { FRIENDS, USER_CHAT_MEMBERS } from "../GQL/fragments"
 import { Chat, User } from "../graphql"
 import { useUser } from "../Hooks/useUser"
 import Modal from "./Modal"
@@ -22,18 +24,12 @@ export default function NewChatModal(props: {
 		error,
 	} = useQuery<{ user: User }>(
 		gql`
+			${FRIENDS}
+			${USER_CHAT_MEMBERS}
 			query GetUser($userId: String!) {
 				user(id: $userId) {
-					friends {
-						id
-						username
-					}
-					chats {
-						id
-						users {
-							id
-						}
-					}
+					...Friends
+					...UserChatMembers
 				}
 			}
 		`,
@@ -44,15 +40,7 @@ export default function NewChatModal(props: {
 		}
 	)
 
-	const [createGroupChat] = useMutation<{ createChat: Chat }>(
-		gql`
-			mutation CreateGroupChat($ownerId: String!, $userIds: [String!]!, $name: String) {
-				createChat(chat: { ownerId: $ownerId, userIds: $userIds, name: $name }) {
-					id
-				}
-			}
-		`
-	)
+	const [createGroupChat] = useMutation<{ createChat: Chat }>(CREATE_CHAT)
 
 	const [selected, setSelected] = useState<string[]>([])
 	const [name, setName] = useState("")

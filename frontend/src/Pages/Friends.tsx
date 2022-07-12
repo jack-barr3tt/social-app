@@ -3,6 +3,7 @@ import { useUser } from "../Hooks/useUser"
 import { User as UserType } from "../graphql"
 import Title from "../Components/Title"
 import FriendDisplay from "../Components/FriendDisplay"
+import { BASIC_USER_INFO, FRIENDS, FRIEND_REQUESTS, USER_CHAT_MEMBERS } from "../GQL/fragments"
 
 export default function Friends() {
 	const { userId } = useUser()
@@ -14,34 +15,16 @@ export default function Friends() {
 		refetch,
 	} = useQuery<{ user: UserType }>(
 		gql`
+			${BASIC_USER_INFO}
+			${FRIENDS}
+			${FRIEND_REQUESTS}
+			${USER_CHAT_MEMBERS}
 			query GetUser($id: String!) {
 				user(id: $id) {
-					id
-					username
-					friends {
-						id
-						username
-					}
-					sentFriendRequests {
-						id
-						receiver {
-							id
-							username
-						}
-					}
-					receivedFriendRequests {
-						id
-						sender {
-							id
-							username
-						}
-					}
-					chats {
-						id
-						users {
-							id
-						}
-					}
+					...BasicUserInfo
+					...Friends
+					...FriendRequests
+					...UserChatMembers
 				}
 			}
 		`,

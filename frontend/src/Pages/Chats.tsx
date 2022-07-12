@@ -3,6 +3,7 @@ import { useState } from "react"
 import { FiPlus } from "react-icons/fi"
 import ChatDisplay from "../Components/ChatDisplay"
 import NewChatModal from "../Components/NewChatModal"
+import { BASIC_CHAT_INFO } from "../GQL/fragments"
 import { User } from "../graphql"
 import { useUser } from "../Hooks/useUser"
 
@@ -17,16 +18,11 @@ export default function Chats() {
 		refetch,
 	} = useQuery<{ user: User }>(
 		gql`
+			${BASIC_CHAT_INFO}
 			query GetChats($userId: String!) {
 				user(id: $userId) {
 					id
-					chats {
-						id
-						name
-						owner {
-							id
-						}
-					}
+					...BasicChatInfo
 				}
 			}
 		`,

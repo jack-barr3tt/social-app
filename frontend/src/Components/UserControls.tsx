@@ -1,14 +1,15 @@
-import { gql, useMutation } from "@apollo/client"
+import { useMutation } from "@apollo/client"
 import { useCallback } from "react"
-import {
-	FiMessageSquare,
-	FiUserX,
-	FiUserPlus,
-	FiCheck,
-	FiX,
-	FiSlash,
-} from "react-icons/fi"
+import { FiMessageSquare, FiUserX, FiUserPlus, FiCheck, FiX, FiSlash } from "react-icons/fi"
 import { useNavigate } from "react-router-dom"
+import {
+	ACCEPT_FRIEND_REQUEST,
+	CREATE_CHAT,
+	REJECT_FRIEND_REQUEST,
+	REMOVE_FRIEND,
+	REVOKE_FRIEND_REQUEST,
+	SEND_FRIEND_REQUEST,
+} from "../GQL/mutations"
 import { Chat, User } from "../graphql"
 
 export default function UserControls(props: { currentUser: User; user: User; update: () => void }) {
@@ -16,55 +17,17 @@ export default function UserControls(props: { currentUser: User; user: User; upd
 
 	const navigate = useNavigate()
 
-	const [sendFriendRequest] = useMutation(
-		gql`
-			mutation SendFriendRequest($senderId: String!, $receiverId: String!) {
-				sendFriendRequest(senderId: $senderId, receiverId: $receiverId)
-			}
-		`
-	)
+	const [sendFriendRequest] = useMutation(SEND_FRIEND_REQUEST)
 
-	const [removeFriend] = useMutation(
-		gql`
-			mutation RemoveFriend($userId: String!, $friendId: String!) {
-				unfriend(userId: $userId, friendId: $friendId)
-			}
-		`
-	)
+	const [removeFriend] = useMutation(REMOVE_FRIEND)
 
-	const [createChat] = useMutation<{ createChat: Chat }>(
-		gql`
-			mutation CreateChat($userId: String!, $friendId: String!) {
-				createChat(chat: { userIds: [$userId, $friendId], ownerId: $userId }) {
-					id
-				}
-			}
-		`
-	)
+	const [createChat] = useMutation<{ createChat: Chat }>(CREATE_CHAT)
 
-	const [acceptRequest] = useMutation(
-		gql`
-			mutation AcceptRequest($id: String!) {
-				acceptFriendRequest(id: $id)
-			}
-		`
-	)
+	const [acceptRequest] = useMutation(ACCEPT_FRIEND_REQUEST)
 
-	const [rejectRequest] = useMutation(
-		gql`
-			mutation RejectRequest($id: String!) {
-				rejectFriendRequest(id: $id)
-			}
-		`
-	)
+	const [rejectRequest] = useMutation(REJECT_FRIEND_REQUEST)
 
-	const [revokeRequest] = useMutation(
-		gql`
-			mutation RevokeRequest($id: String!) {
-				revokeFriendRequest(id: $id)
-			}
-		`
-	)
+	const [revokeRequest] = useMutation(REVOKE_FRIEND_REQUEST)
 
 	const sendRequest = useCallback(async () => {
 		await sendFriendRequest({
@@ -97,8 +60,8 @@ export default function UserControls(props: { currentUser: User; user: User; upd
 
 		const { data } = await createChat({
 			variables: {
-				userId: currentUser.id,
-				friendId: user.id,
+                ownerId: currentUser.id,
+                userIds: [user.id]
 			},
 		})
 

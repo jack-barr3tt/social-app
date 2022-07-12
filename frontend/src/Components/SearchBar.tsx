@@ -1,6 +1,7 @@
 import { gql, useLazyQuery, useQuery } from "@apollo/client"
 import { useEffect, useState } from "react"
 import { useLocation } from "react-router-dom"
+import { BASIC_USER_INFO, FRIENDS_IDS, FRIEND_REQUESTS, USER_CHAT_MEMBERS } from "../GQL/fragments"
 import { User } from "../graphql"
 import { useUser } from "../Hooks/useUser"
 import SearchResult from "./SearchResult"
@@ -12,33 +13,16 @@ export default function SearchBar() {
 
 	const { data: { user } = {}, refetch } = useQuery<{ user: User }>(
 		gql`
+			${BASIC_USER_INFO}
+			${FRIENDS_IDS}
+			${FRIEND_REQUESTS}
+			${USER_CHAT_MEMBERS}
 			query GetUser($userId: String!) {
 				user(id: $userId) {
-					username
-					id
-					friends {
-						id
-					}
-					sentFriendRequests {
-						id
-						receiver {
-							id
-							username
-						}
-					}
-					receivedFriendRequests {
-						id
-						sender {
-							id
-							username
-						}
-					}
-					chats {
-						id
-						users {
-							id
-						}
-					}
+					...BasicUserInfo
+					...FriendsIDs
+					...FriendRequests
+					...UserChatMembers
 				}
 			}
 		`,
@@ -49,16 +33,16 @@ export default function SearchBar() {
 
 	const [fetch, { data: { search = [] } = {} }] = useLazyQuery<{ search: User[] }>(
 		gql`
+			${BASIC_USER_INFO}
 			query SearchUsers($query: String!) {
 				search(query: $query) {
-					id
-					username
+					...BasicUserInfo
 				}
 			}
 		`,
 		{
 			variables: {
-				query
+				query,
 			},
 		}
 	)

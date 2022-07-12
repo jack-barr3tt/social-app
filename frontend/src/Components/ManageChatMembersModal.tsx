@@ -1,6 +1,8 @@
 import { gql, useMutation, useQuery } from "@apollo/client"
 import { Dispatch, FormEvent, SetStateAction, useEffect, useState } from "react"
 import { FiSave } from "react-icons/fi"
+import { UPDATE_MEMBERS } from "../GQL/mutations"
+import { CHAT_MEMBERS, FRIENDS } from "../GQL/fragments"
 import { Chat, User } from "../graphql"
 import { useUser } from "../Hooks/useUser"
 import Modal from "./Modal"
@@ -9,8 +11,8 @@ import Title from "./Title"
 export default function ManageChatMembersModal(props: {
 	open: boolean
 	setOpen: Dispatch<SetStateAction<boolean>>
-	id: string,
-    onSubmit: () => void
+	id: string
+	onSubmit: () => void
 }) {
 	const { open, setOpen, id, onSubmit } = props
 
@@ -18,14 +20,13 @@ export default function ManageChatMembersModal(props: {
 
 	const { data: { chat } = {} } = useQuery<{ chat: Chat }>(
 		gql`
-			query GetChat($id: String!) {
-				chat(id: $id) {
-					users {
-						id
-					}
-				}
-			}
-		`,
+            ${CHAT_MEMBERS}
+            GetChat($id: String!) {
+		        chat(id: $id) {
+                    ...ChatMemeberIDs
+                }
+            }
+        `,
 		{
 			variables: {
 				id,
@@ -35,12 +36,10 @@ export default function ManageChatMembersModal(props: {
 
 	const { data: { user } = {} } = useQuery<{ user: User }>(
 		gql`
+			${FRIENDS}
 			query GetUser($userId: String!) {
 				user(id: $userId) {
-					friends {
-						id
-						username
-					}
+					...Friends
 				}
 			}
 		`,
@@ -51,11 +50,7 @@ export default function ManageChatMembersModal(props: {
 		}
 	)
 
-	const [updateMembers] = useMutation(gql`
-		mutation UpdateMembers($id: String!, $userIds: [String!]!) {
-			editMembers(changes: { id: $id, userIds: $userIds })
-		}
-	`)
+	const [updateMembers] = useMutation(UPDATE_MEMBERS)
 
 	const [selected, setSelected] = useState<string[]>([])
 
@@ -83,7 +78,7 @@ export default function ManageChatMembersModal(props: {
 		})
 
 		setOpen(false)
-        onSubmit()
+		onSubmit()
 	}
 
 	return (

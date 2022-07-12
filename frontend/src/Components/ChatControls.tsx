@@ -1,9 +1,10 @@
-import { gql, useMutation } from "@apollo/client"
+import { useMutation } from "@apollo/client"
 import { useState } from "react"
 import { FiEdit3, FiLogOut, FiSettings, FiTrash2 } from "react-icons/fi"
 import { useNavigate } from "react-router-dom"
 import { Chat } from "../graphql"
 import { useUser } from "../Hooks/useUser"
+import { DELETE_CHAT, LEAVE_CHAT } from "../GQL/mutations"
 import ManageChatMembersModal from "./ManageChatMembersModal"
 import RenameChatModal from "./RenameChatModal"
 
@@ -17,17 +18,9 @@ export default function ChatControls(props: { chat: Chat; refetchChat: () => voi
 	const [editOpen, setEditOpen] = useState(false)
 	const [manageOpen, setManageOpen] = useState(false)
 
-	const [deleteChat] = useMutation(gql`
-		mutation DeleteChat($id: String!) {
-			deleteChat(id: $id)
-		}
-	`)
+	const [deleteChat] = useMutation(DELETE_CHAT)
 
-	const [leaveChat] = useMutation(gql`
-		mutation LeaveChat($id: String!, $userId: String!) {
-			leaveChat(id: $id, userId: $userId)
-		}
-	`)
+	const [leaveChat] = useMutation(LEAVE_CHAT)
 
 	const handleDelete = async () => {
 		await deleteChat({ variables: { id: chat.id } })
