@@ -3,8 +3,10 @@ import { isSameDay } from "date-fns"
 import { FormEvent, useEffect, useRef, useState } from "react"
 import { FiSend } from "react-icons/fi"
 import { useParams } from "react-router-dom"
+import ChatControls from "../Components/ChatControls"
 import Message from "../Components/Message"
 import MessageDateSep from "../Components/MessageDateSep"
+import Title from "../Components/Title"
 import { Chat as ChatType, Message as MessageType } from "../graphql"
 import { useUser } from "../Hooks/useUser"
 
@@ -19,6 +21,7 @@ export default function Chat() {
 		gql`
 			query GetChat($chatId: String!) {
 				chat(id: $chatId) {
+                    id
 					name
 					messages {
 						user {
@@ -29,6 +32,9 @@ export default function Chat() {
 						createdAt
 					}
 					users {
+						id
+					}
+					owner {
 						id
 					}
 				}
@@ -58,6 +64,8 @@ export default function Chat() {
 	const sendMessage = async (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault()
 
+		if (message.length < 1) return
+
 		await sendMutation({
 			variables: {
 				userId,
@@ -73,9 +81,9 @@ export default function Chat() {
 		setMessage("")
 	}
 
-    useEffect(() => {
-        if(scrollRef && scrollRef.current) scrollRef.current.scrollIntoView({ behavior: "smooth" })
-    }, [scrollRef])
+	useEffect(() => {
+		if (scrollRef && scrollRef.current) scrollRef.current.scrollIntoView({ behavior: "smooth" })
+	}, [scrollRef])
 
 	return (
 		<>
@@ -83,9 +91,10 @@ export default function Chat() {
 			{error && <p>{error.message}</p>}
 			{chat && (
 				<>
-					<div className="border border-gray-400 border-t-0 border-x-0 pb-4 flex-none">
-						<h2>{chat.name}</h2>
-					</div>
+					<Title>
+						{chat.name}
+						<ChatControls chat={chat} refetchChat={() => refetch()} />
+					</Title>
 					<div className="flex flex-col gap-2 p-8 grow overflow-x-auto">
 						{[...chat.messages]
 							.sort(

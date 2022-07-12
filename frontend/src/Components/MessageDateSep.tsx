@@ -1,5 +1,4 @@
 import { format } from "date-fns"
-import React from "react"
 
 export default function MessageDateSep(props: { date: Date }) {
 	const { date } = props
