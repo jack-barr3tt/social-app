@@ -1,6 +1,7 @@
 import { useQuery } from "@apollo/client"
 import { useState } from "react"
 import { FiPlus } from "react-icons/fi"
+import IconButton from "../Components/IconButton"
 import NewPostModal from "../Components/NewPostModal"
 import Post from "../Components/Post"
 import { GET_FRIENDS_POSTS } from "../GQL/queries"
@@ -31,15 +32,14 @@ export default function Posts() {
 						(a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
 					)
 					.map((p) => (
-						<Post id={p.id} />
+						<Post id={p.id} key={p.id}/>
 					))}
 			</div>
-			<div
-				className="greySurface iconButton absolute right-8 bottom-8"
+			<IconButton
 				onClick={() => setOpen(true)}
-			>
-				<FiPlus />
-			</div>
+				className="fixed right-8 bottom-8"
+				type="new"
+			/>
 		</>
 	)
 }

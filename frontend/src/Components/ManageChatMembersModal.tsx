@@ -1,12 +1,12 @@
 import { gql, useMutation, useQuery } from "@apollo/client"
 import { Dispatch, FormEvent, SetStateAction, useEffect, useState } from "react"
-import { FiSave } from "react-icons/fi"
 import { UPDATE_MEMBERS } from "../GQL/mutations"
 import { CHAT_MEMBERS, FRIENDS } from "../GQL/fragments"
 import { Chat, User } from "../graphql"
 import { useUser } from "../Hooks/useUser"
 import Modal from "./Modal"
 import Title from "./Title"
+import IconButton from "./IconButton"
 
 export default function ManageChatMembersModal(props: {
 	open: boolean
@@ -83,11 +83,11 @@ export default function ManageChatMembersModal(props: {
 	return (
 		<Modal open={open} setOpen={setOpen}>
 			<Title>Manage Members</Title>
-			<form className="flex flex-col gap-4 pt-4" onSubmit={saveUsers}>
+			<form className="formFlex" onSubmit={saveUsers}>
 				{user &&
 					user.friends.map((f) => (
 						<div
-							className="flex flex-row justify-between p-4 border border-gray-300 rounded-lg"
+							className="flexRowBetween p-4 grayBorder rounded-lg"
 							key={f.id}
 							onClick={() => toggle(f.id)}
 						>
@@ -95,9 +95,7 @@ export default function ManageChatMembersModal(props: {
 							<input type="checkbox" id={f.id} checked={selected.includes(f.id)} />
 						</div>
 					))}
-				<button type="submit" className="greySurface iconButton self-end">
-					<FiSave size="12" />
-				</button>
+				<IconButton type="save" className="self-end" />
 			</form>
 		</Modal>
 	)

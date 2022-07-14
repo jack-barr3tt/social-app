@@ -1,9 +1,9 @@
 import { useMutation, useQuery } from "@apollo/client"
 import { Dispatch, SetStateAction, useEffect, useState } from "react"
-import { FiSave } from "react-icons/fi"
 import { EDIT_CHAT_NAME } from "../GQL/mutations"
 import { CHAT_NAME } from "../GQL/queries"
 import { Chat } from "../graphql"
+import IconButton from "./IconButton"
 import Modal from "./Modal"
 import Title from "./Title"
 
@@ -44,7 +44,7 @@ export default function RenameChatModal(props: {
 	return (
 		<Modal open={open} setOpen={setOpen}>
 			<Title>Rename Chat</Title>
-			<form className="flex flex-col gap-4 pt-4" onSubmit={handleSubmit}>
+			<form className="formFlex" onSubmit={handleSubmit}>
 				<input
 					className="input"
 					type="text"
@@ -52,9 +52,7 @@ export default function RenameChatModal(props: {
 					value={name}
 					onChange={(e) => setName(e.target.value)}
 				/>
-				<button className="greySurface iconButton self-end" type="submit">
-					<FiSave size="12" />
-				</button>
+				<IconButton className="self-end" type="save" />
 			</form>
 		</Modal>
 	)

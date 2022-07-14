@@ -14,8 +14,6 @@ export default function Title(props: { children: ReactNode }) {
 	}
 
 	return (
-		<div className="border border-gray-400 border-t-0 border-x-0 pb-4 flex-none flex flex-row justify-between">
-			{getEl(children)}
-		</div>
+		<div className="grayBorder lineUnder pb-4 flex-none flexRowBetween">{getEl(children)}</div>
 	)
 }

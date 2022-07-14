@@ -48,10 +48,10 @@ export default function SearchBar() {
 				/>
 				{query.length > 3 && (
 					<div
-						className="absolute w-full rounded-lg border border-gray-400 p-4 bg-white"
+						className="absolute w-full rounded-lg grayBorder p-4 bg-white"
 						onBlur={() => setQuery("")}
 					>
-						<div className="border border-gray-400 border-x-0 border-b-0" />
+						<div className="grayBorder lineOver" />
 						{search.map((result) => (
 							<SearchResult key={result.id} id={result.id} />
 						))}

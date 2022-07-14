@@ -1,6 +1,5 @@
 import { useMutation, useQuery } from "@apollo/client"
 import { useCallback } from "react"
-import { FiMessageSquare, FiUserX, FiUserPlus, FiCheck, FiX, FiSlash } from "react-icons/fi"
 import { useNavigate } from "react-router-dom"
 import {
 	ACCEPT_FRIEND_REQUEST,
@@ -13,6 +12,7 @@ import {
 import { USER_SOCIAL } from "../GQL/queries"
 import { Chat, User } from "../graphql"
 import { useUser } from "../Hooks/useUser"
+import IconButton from "./IconButton"
 
 export default function UserControls(props: { id: string }) {
 	const { id } = props
@@ -121,30 +121,18 @@ export default function UserControls(props: { id: string }) {
 		<div className="flex flex-row gap-2">
 			{user.friends.some((u) => u.id === id) ? (
 				<>
-					<div className="greySurface iconButton" onClick={startChat}>
-						<FiMessageSquare size="12" />
-					</div>
-					<div className="greySurface iconButton" onClick={unFriend}>
-						<FiUserX size="12" />
-					</div>
+					<IconButton type="message" onClick={startChat} />
+					<IconButton type="unfriend" onClick={unFriend} />
 				</>
 			) : user.sentFriendRequests.some((u) => u.receiver.id === id) ? (
-				<div className="greySurface iconButton" onClick={revokeFriendRequest}>
-					<FiSlash size="12" />
-				</div>
+				<IconButton type="cancel" onClick={revokeFriendRequest} />
 			) : user.receivedFriendRequests.some((u) => u.sender.id === id) ? (
 				<>
-					<div className="greySurface iconButton" onClick={acceptFriendRequest}>
-						<FiCheck size="12" />
-					</div>
-					<div className="greySurface iconButton" onClick={rejectFriendRequest}>
-						<FiX size="12" />
-					</div>
+					<IconButton type="done" onClick={acceptFriendRequest} />
+					<IconButton type="cancel" onClick={rejectFriendRequest} />
 				</>
 			) : (
-				<div className="greySurface iconButton" onClick={sendRequest}>
-					<FiUserPlus size="12" />
-				</div>
+				<IconButton type="add-friend" onClick={sendRequest} />
 			)}
 		</div>
 	)

@@ -20,29 +20,63 @@ h2 {
 }
 
 h4 {
-    font-weight: 700;
-    font-size: 1rem;
+	font-weight: 700;
+	font-size: 1rem;
+}
+
+textarea {
+	resize: none;
 }
 
 @layer components {
-	.greySurface {
-		@apply border-gray-400 hover:bg-gray-100;
+	.grayBorder {
+		@apply border border-gray-400;
 	}
 
-	.button {
-		@apply p-4 border  rounded-lg
+	.graySurface {
+		@apply grayBorder hover:bg-gray-100;
+	}
+
+	.buttonBase {
+		@apply border  rounded-lg bg-white
         transition-all duration-300;
 	}
 
+	.button {
+		@apply p-4 buttonBase;
+	}
+
 	.iconButton {
-		@apply button h-12 w-12 hover:scale-105;
+		@apply buttonBase h-12 w-12 
+        flex items-center justify-center 
+        hover:scale-105;
 	}
 
 	.input {
-		@apply border border-gray-400 p-2 rounded-lg w-full h-12;
+		@apply grayBorder p-2 rounded-lg w-full h-12;
 	}
 
-    .timeDisplay {
-        @apply font-light text-sm
-    }
+	.timeDisplay {
+		@apply font-light text-sm;
+	}
+
+	.flexRowBetween {
+		@apply flex flex-row justify-between;
+	}
+
+	.flexRowCenter {
+		@apply flex flex-row items-center;
+	}
+
+	.formFlex {
+		@apply flex flex-col gap-4 pt-4;
+	}
+
+	.lineUnder {
+		@apply border-x-0 border-t-0;
+	}
+
+	.lineOver {
+		@apply border-x-0 border-b-0;
+	}
 }

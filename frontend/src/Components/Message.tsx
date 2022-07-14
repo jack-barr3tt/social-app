@@ -3,7 +3,7 @@ import { Message as APIMessage } from "../graphql"
 import { useCallback, useEffect, useState } from "react"
 import { useQuery } from "@apollo/client"
 import { MESSAGE } from "../GQL/queries"
-import relativeTime from "../functions/time"
+import relativeTime from "../Functions/time"
 
 export default function Message(props: { id: string; group: boolean; showTime: boolean }) {
 	const { id, group, showTime } = props
@@ -20,7 +20,7 @@ export default function Message(props: { id: string; group: boolean; showTime: b
 
 		const created = new Date(message.createdAt)
 
-        return relativeTime(created)
+		return relativeTime(created)
 	}, [])
 
 	const [time, setTime] = useState(calculateTime())

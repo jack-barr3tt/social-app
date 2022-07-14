@@ -1,7 +1,7 @@
 import { useMutation } from "@apollo/client"
 import { FiEdit3, FiHeart } from "react-icons/fi"
 import { client } from "../App"
-import relativeTime from "../functions/time"
+import relativeTime from "../Functions/time"
 import { POSTS_INFO } from "../GQL/fragments"
 import { LIKE_POST } from "../GQL/mutations"
 import { GET_POST_LIKES } from "../GQL/queries"
@@ -27,22 +27,22 @@ export default function Post(props: { id: string }) {
 	if (!post) return <></>
 
 	return (
-		<div className="w-2/3 rounded-3xl border border-gray-300 p-8 flex flex-row items-center group">
+		<div className="w-2/3 rounded-3xl grayBorder p-8 flexRowCenter group bg-white">
 			{post.user.id === userId && <PostTools id={id} />}
 			<div className="w-full">
-				<div className="flex flex-row justify-between">
+				<div className="flexRowBetween">
 					<h4>{post.title}</h4>
 					<p>{relativeTime(new Date(post.createdAt))}</p>
 				</div>
 				<p className="py-4">{post.content}</p>
-				<div className="flex flex-row justify-between border border-gray-300 border-x-0 border-b-0 py-4">
+				<div className="flexRowBetween grayBorder lineOver py-4">
 					<p>{post.user.username}</p>
-					<div className="flex flex-row items-center gap-4">
+					<div className="flexRowCenter gap-4">
 						<FiHeart
 							size="24"
 							className={
 								post.likedBy.some((u) => u.id === userId)
-									? "fill-pink-700 stroke-pink-700"
+									? "fill-pink-600 stroke-pink-600"
 									: ""
 							}
 							onClick={() => likePost()}

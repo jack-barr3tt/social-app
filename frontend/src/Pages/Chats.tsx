@@ -2,6 +2,7 @@ import { useQuery } from "@apollo/client"
 import { useState } from "react"
 import { FiPlus } from "react-icons/fi"
 import ChatDisplay from "../Components/ChatDisplay"
+import IconButton from "../Components/IconButton"
 import NewChatModal from "../Components/NewChatModal"
 import { GET_CHAT_IDS } from "../GQL/queries"
 import { User } from "../graphql"
@@ -23,7 +24,7 @@ export default function Chats() {
 
 	return (
 		<>
-			<div className="border border-gray-400 border-t-0 border-x-0 pb-4 flex-none">
+			<div className="grayBorder lineUnder pb-4 flex-none">
 				<h2>Chats</h2>
 			</div>
 			{loading && <p>Loading chats...</p>}
@@ -31,13 +32,11 @@ export default function Chats() {
 			<div className="flex flex-col gap-4 p-4">
 				{!!user && user.chats.map((chat) => <ChatDisplay id={chat.id} key={chat.id} />)}
 			</div>
-
-			<div
-				className="greySurface iconButton absolute right-8 bottom-8"
+			<IconButton
+				type="new"
+				className="absolute right-8 bottom-8"
 				onClick={() => setModalOpen(true)}
-			>
-				<FiPlus size="12" />
-			</div>
+			/>
 			<NewChatModal open={modalOpen} setOpen={setModalOpen} />
 		</>
 	)

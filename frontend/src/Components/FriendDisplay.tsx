@@ -9,7 +9,7 @@ export default function FriendDisplay(props: { id: string }) {
 	const { data: { user } = {} } = useQuery<{ user: User }>(USER_NAME, { variables: { id } })
 
 	return (
-		<div className="border border-gray-300 rounded-lg p-2 pl-8 items-center flex flex-row justify-between">
+		<div className="grayBorder rounded-lg p-2 pl-8 items-center flexRowBetween bg-white">
 			<h3>{user?.username}</h3>
 			<UserControls id={id} />
 		</div>

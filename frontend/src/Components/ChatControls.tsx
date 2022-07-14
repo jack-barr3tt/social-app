@@ -1,6 +1,5 @@
-import { useLazyQuery, useMutation, useQuery } from "@apollo/client"
+import { useMutation, useQuery } from "@apollo/client"
 import { useState } from "react"
-import { FiEdit3, FiLogOut, FiSettings, FiTrash2 } from "react-icons/fi"
 import { useNavigate } from "react-router-dom"
 import { Chat } from "../graphql"
 import { useUser } from "../Hooks/useUser"
@@ -8,6 +7,7 @@ import { DELETE_CHAT, LEAVE_CHAT } from "../GQL/mutations"
 import ManageChatMembersModal from "./ManageChatMembersModal"
 import RenameChatModal from "./RenameChatModal"
 import { CHAT_OWNER_ID, GET_CHAT_IDS } from "../GQL/queries"
+import IconButton from "./IconButton"
 
 export default function ChatControls(props: { id: string }) {
 	const { id } = props
@@ -49,20 +49,12 @@ export default function ChatControls(props: { id: string }) {
 			<div className="flex flex-row gap-2">
 				{chat?.owner.id === userId ? (
 					<>
-						<div className="greySurface iconButton" onClick={() => setEditOpen(true)}>
-							<FiEdit3 />
-						</div>
-						<div className="greySurface iconButton" onClick={() => setManageOpen(true)}>
-							<FiSettings />
-						</div>
-						<div className="greySurface iconButton" onClick={() => handleDelete()}>
-							<FiTrash2 />
-						</div>
+						<IconButton onClick={() => setEditOpen(true)} type="edit" />
+						<IconButton onClick={() => setManageOpen(true)} type="settings" />
+						<IconButton onClick={() => handleDelete} type="delete" />
 					</>
 				) : (
-					<div className="greySurface iconButton" onClick={() => handleLeave()}>
-						<FiLogOut />
-					</div>
+					<IconButton onClick={() => handleLeave()} type="leave" />
 				)}
 			</div>
 		</>

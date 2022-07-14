@@ -1,6 +1,5 @@
-import { gql, useLazyQuery, useMutation, useQuery } from "@apollo/client"
+import { gql, useMutation, useQuery } from "@apollo/client"
 import { Dispatch, FormEvent, SetStateAction, useCallback, useState } from "react"
-import { FiCheck } from "react-icons/fi"
 import { useNavigate } from "react-router-dom"
 import { CREATE_CHAT } from "../GQL/mutations"
 import { FRIENDS } from "../GQL/fragments"
@@ -9,6 +8,7 @@ import { useUser } from "../Hooks/useUser"
 import Modal from "./Modal"
 import Title from "./Title"
 import { GET_CHAT_IDS } from "../GQL/queries"
+import IconButton from "./IconButton"
 
 export default function NewChatModal(props: {
 	open: boolean
@@ -79,7 +79,7 @@ export default function NewChatModal(props: {
 			<Title>New Chat</Title>
 			{loading && <p>Loading...</p>}
 			{error && <p>{"Error: " + error}</p>}
-			<form className="flex flex-col gap-4 pt-4" onSubmit={handleCreateChat}>
+			<form className="formFlex" onSubmit={handleCreateChat}>
 				<input
 					className="input"
 					placeholder="Name your chat..."
@@ -90,7 +90,7 @@ export default function NewChatModal(props: {
 				{user &&
 					user.friends.map((f) => (
 						<div
-							className="flex flex-row justify-between p-4 border border-gray-300 rounded-lg"
+							className="flexRowBetween p-4 borderGray rounded-lg"
 							key={f.id}
 							onClick={() => toggle(f.id)}
 						>
@@ -98,13 +98,7 @@ export default function NewChatModal(props: {
 							<input type="checkbox" id={f.id} checked={selected.includes(f.id)} />
 						</div>
 					))}
-				<button
-					className="greySurface iconButton self-end"
-					type="submit"
-					disabled={selected.length < 1}
-				>
-					<FiCheck size="12" />
-				</button>
+				<IconButton type="done" className="self-end" disabled={selected.length < 1} />
 			</form>
 		</Modal>
 	)

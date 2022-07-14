@@ -1,9 +1,9 @@
 import { useMutation } from "@apollo/client"
 import { Dispatch, FormEvent, SetStateAction, useState } from "react"
-import { FiSave } from "react-icons/fi"
 import { CREATE_POST } from "../GQL/mutations"
 import { GET_FRIENDS_POSTS } from "../GQL/queries"
 import { useUser } from "../Hooks/useUser"
+import IconButton from "./IconButton"
 import Modal from "./Modal"
 import Title from "./Title"
 
@@ -41,16 +41,14 @@ export default function NewPostModal(props: {
 	return (
 		<Modal open={open} setOpen={setOpen}>
 			<Title>New Post</Title>
-			<form onSubmit={handleSubmit} className="flex flex-col gap-4 pt-4">
+			<form onSubmit={handleSubmit} className="formFlex">
 				<input className="input" value={title} onChange={(e) => setTitle(e.target.value)} />
 				<textarea
 					className="input"
 					value={content}
 					onChange={(e) => setContent(e.target.value)}
 				/>
-				<button className="greySurface iconButton self-end" type="submit">
-					<FiSave />
-				</button>
+				<IconButton type="done" className="self-end" />
 			</form>
 		</Modal>
 	)

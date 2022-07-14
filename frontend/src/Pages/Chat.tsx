@@ -4,6 +4,7 @@ import { FormEvent, useEffect, useRef, useState } from "react"
 import { FiSend } from "react-icons/fi"
 import { useParams } from "react-router-dom"
 import ChatControls from "../Components/ChatControls"
+import IconButton from "../Components/IconButton"
 import Message from "../Components/Message"
 import MessageDateSep from "../Components/MessageDateSep"
 import Title from "../Components/Title"
@@ -108,9 +109,7 @@ export default function Chat() {
 							value={message}
 							onChange={(e) => setMessage(e.target.value)}
 						/>
-						<button type="submit" className="greySurface iconButton">
-							<FiSend size="12" />
-						</button>
+						<IconButton type="send" />
 					</form>
 				</>
 			)}
