@@ -1,9 +1,9 @@
 import { useUser } from "../Hooks/useUser"
 import { Message as APIMessage } from "../graphql"
-import { format, isSameMinute, isToday } from "date-fns"
 import { useCallback, useEffect, useState } from "react"
 import { useQuery } from "@apollo/client"
 import { MESSAGE } from "../GQL/queries"
+import relativeTime from "../functions/time"
 
 export default function Message(props: { id: string; group: boolean; showTime: boolean }) {
 	const { id, group, showTime } = props
@@ -20,13 +20,7 @@ export default function Message(props: { id: string; group: boolean; showTime: b
 
 		const created = new Date(message.createdAt)
 
-		if (isSameMinute(new Date(), created)) {
-			return "Now"
-		} else if (isToday(created)) {
-			return format(created, "HH:mm")
-		} else {
-			return format(created, "dd/MM/yyyy")
-		}
+        return relativeTime(created)
 	}, [])
 
 	const [time, setTime] = useState(calculateTime())
