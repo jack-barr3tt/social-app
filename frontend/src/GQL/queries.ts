@@ -1,5 +1,11 @@
 import { gql } from "@apollo/client"
-import { BASIC_USER_INFO, FRIENDS, FRIEND_REQUESTS, USER_CHAT_MEMBERS } from "./fragments"
+import {
+	BASIC_USER_INFO,
+	FRIENDS,
+	FRIEND_REQUESTS,
+	POSTS_INFO,
+	USER_CHAT_MEMBERS,
+} from "./fragments"
 
 export const CHAT_NAME = gql`
 	query ChatName($id: String!) {
@@ -86,6 +92,35 @@ export const MESSAGE = gql`
 			}
 			content
 			createdAt
+		}
+	}
+`
+
+export const GET_FRIENDS_POSTS = gql`
+	${POSTS_INFO}
+	query GetFriendsPosts($userId: String!) {
+		friendPosts(userId: $userId) {
+			...PostsInfo
+		}
+	}
+`
+export const GET_POST = gql`
+	${POSTS_INFO}
+	query GetPost($id: String!) {
+		post(id: $id) {
+			...PostsInfo
+		}
+	}
+`
+
+export const GET_POST_LIKES = gql`
+	query GetPostLikes($id: String!) {
+		post(id: $id) {
+			id
+			likes
+			likedBy {
+				id
+			}
 		}
 	}
 `

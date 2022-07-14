@@ -2,7 +2,7 @@ import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client"
 import { UserProvider } from "./Hooks/useUser"
 import Router from "./Router"
 
-const client = new ApolloClient({
+export const client = new ApolloClient({
 	uri: "http://192.168.0.98:3000/graphql",
 	cache: new InMemoryCache(),
 	defaultOptions: {

@@ -69,3 +69,33 @@ export const SEND_MESSAGE = gql`
 		}
 	}
 `
+
+export const LIKE_POST = gql`
+	mutation LikePost($userId: String!, $postId: String!) {
+		like(userId: $userId, postId: $postId) {
+			id
+		}
+	}
+`
+
+export const DELETE_POST = gql`
+	mutation DeletePost($id: String!) {
+		deletePost(id: $id)
+	}
+`
+
+export const EDIT_POST = gql`
+	mutation EditPost($id: String!, $title: String!, $content: String!) {
+		editPost(id: $id, changes: { title: $title, content: $content }) {
+			id
+		}
+	}
+`
+
+export const CREATE_POST = gql`
+	mutation CreatePost($userId: String!, $title: String!, $content: String!) {
+		createPost(input: { userId: $userId, title: $title, content: $content }) {
+			id
+		}
+	}
+`

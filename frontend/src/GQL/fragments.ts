@@ -71,3 +71,21 @@ export const BASIC_USER_INFO = gql`
 		username
 	}
 `
+
+export const POSTS_INFO = gql`
+	fragment PostsInfo on Post {
+		id
+		user {
+			id
+			username
+		}
+		likes
+		likedBy {
+			id
+		}
+		edited
+		title
+		content
+		createdAt
+	}
+`

@@ -1,6 +1,6 @@
 import { gql, useQuery } from "@apollo/client"
-import { useState } from "react"
 import { useUser } from "../Hooks/useUser"
+import Posts from "./Posts"
 
 export default function Home() {
 	const { userId } = useUser()
@@ -28,6 +28,7 @@ export default function Home() {
 	return (
 		<>
 			<h2>{`Welcome, ${user.username}`}</h2>
+			<Posts />
 		</>
 	)
 }
