@@ -9,7 +9,7 @@ export default function SearchResult(props: { id: string }) {
 	const { data: { user } = {} } = useQuery<{ user: User }>(USER_NAME, { variables: { id } })
 
 	return (
-		<div className="flexRowCenter justify-between px-8 py-2 grayBorder lineUnder">
+		<div className="flexRowCenter justify-between px-8 py-2 cBorder lineUnder">
 			<div>{user?.username}</div>
 			<UserControls id={id} />
 		</div>

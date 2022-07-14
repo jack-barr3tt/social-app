@@ -27,7 +27,7 @@ export default function Post(props: { id: string }) {
 	if (!post) return <></>
 
 	return (
-		<div className="w-2/3 rounded-3xl grayBorder p-8 flexRowCenter group bg-white">
+		<div className="w-2/3 rounded-3xl cBorder p-8 flexRowCenter group bgAccent">
 			{post.user.id === userId && <PostTools id={id} />}
 			<div className="w-full">
 				<div className="flexRowBetween">
@@ -35,7 +35,7 @@ export default function Post(props: { id: string }) {
 					<p>{relativeTime(new Date(post.createdAt))}</p>
 				</div>
 				<p className="py-4">{post.content}</p>
-				<div className="flexRowBetween grayBorder lineOver py-4">
+				<div className="flexRowBetween cBorder lineOver py-4">
 					<p>{post.user.username}</p>
 					<div className="flexRowCenter gap-4">
 						<FiHeart
@@ -52,8 +52,8 @@ export default function Post(props: { id: string }) {
 				</div>
 				{post.edited && (
 					<div className="flex flex-row gap-2">
-						<FiEdit3 className="text-xs text-gray-600" />
-						<p className="text-xs text-gray-600">This post has been edited</p>
+						<FiEdit3 className="text-xs subtleText" />
+						<p className="text-xs subtleText">This post has been edited</p>
 					</div>
 				)}
 			</div>

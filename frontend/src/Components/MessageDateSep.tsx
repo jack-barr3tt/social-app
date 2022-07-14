@@ -5,7 +5,7 @@ export default function MessageDateSep(props: { date: Date }) {
 
 	return (
 		<div className="w-full flexRowCenter justify-center">
-			<div className="grayBorder py-2 px-8 rounded-lg">
+			<div className="cBorder py-2 px-8 rounded-lg">
 				<p>{format(date, "ccc co MMM yyyy")}</p>
 			</div>
 		</div>

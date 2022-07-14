@@ -24,7 +24,7 @@ export default function Chats() {
 
 	return (
 		<>
-			<div className="grayBorder lineUnder pb-4 flex-none">
+			<div className="cBorder lineUnder pb-4 flex-none">
 				<h2>Chats</h2>
 			</div>
 			{loading && <p>Loading chats...</p>}

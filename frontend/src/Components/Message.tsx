@@ -40,7 +40,7 @@ export default function Message(props: { id: string; group: boolean; showTime: b
 			<div className={`flex flex-col ${isOwnMessage ? "items-end" : "items-start"}`}>
 				<div
 					className={`p-2 rounded-lg border-2 ${
-						isOwnMessage ? "bg-blue-100 border-blue-300" : "bg-gray-100 border-gray-300"
+						isOwnMessage ? "blue" : "msgGray"
 					}`}
 				>
 					{group && <h4 className="pb-4">{message.user.username}</h4>}

@@ -12,7 +12,7 @@ export default function ChatDisplay(props: { id: string }) {
 	const navigate = useNavigate()
 
 	return (
-		<div className="grayBorder rounded-lg flexRowCenter bg-white">
+		<div className="cBorder rounded-lg flexRowCenter bgAccent">
 			<div className="grow h-full rounded-lg flexRowCenter pl-4" onClick={() => navigate(id)}>
 				<h3>{chat?.name}</h3>
 			</div>

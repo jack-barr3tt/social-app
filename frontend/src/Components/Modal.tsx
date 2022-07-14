@@ -12,7 +12,7 @@ export default function Modal(
 			className="h-full w-full fixed top-0 left-0 bg-[#000000cc] flex items-center justify-center"
 			onClick={() => setOpen(false)}
 		>
-			<div className="p-8 bg-white z-2 w-1/2 max-h-1/2" onClick={(e) => e.stopPropagation()}>
+			<div className="p-8 bgAccent z-2 w-1/2 max-h-1/2 rounded-3xl" onClick={(e) => e.stopPropagation()}>
 				{children}
 			</div>
 		</div>

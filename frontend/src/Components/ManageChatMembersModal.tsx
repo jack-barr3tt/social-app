@@ -87,7 +87,7 @@ export default function ManageChatMembersModal(props: {
 				{user &&
 					user.friends.map((f) => (
 						<div
-							className="flexRowBetween p-4 grayBorder rounded-lg"
+							className="flexRowBetween p-4 cBorder rounded-lg"
 							key={f.id}
 							onClick={() => toggle(f.id)}
 						>

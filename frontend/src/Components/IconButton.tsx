@@ -20,20 +20,8 @@ import {
 type DefaultIcons = { [key: string]: { el: IconType; style?: string } }
 
 type IconButtonProps = Omit<ButtonHTMLAttributes<HTMLButtonElement>, "type"> & {
-	type: string
+	type?: string
 	className?: string
-	onClick?: () => void
-}
-
-const styles: { [key: string]: string } = {
-	red: "bg-red-50 border-red-200 hover:bg-red-100 hover:border-red-300",
-	yellow: "bg-yellow-50 border-yellow-300 hover:bg-yellow-100",
-	"dark-gray": "bg-gray-200 border-gray-400 hover:bg-gray-300",
-	blue: "bg-blue-50 border-blue-300 hover:bg-blue-100",
-	"dark-blue": "bg-blue-100 border-blue-300 hover:bg-blue-200",
-	pink: "bg-fuchsia-50 border-fuchsia-300 hover:bg-fuchsia-100",
-	green: "bg-green-50 border-green-300 hover:bg-green-100",
-	violet: "bg-violet-50 border-violet-300 hover:bg-violet-100",
 }
 
 const icons: DefaultIcons = {
@@ -54,20 +42,19 @@ const icons: DefaultIcons = {
 }
 
 export default function IconButton(props: IconButtonProps) {
-	const { type, className, onClick, children, ...rest } = props
+	const { type, className, children, ...rest } = props
 
 	if (type && type in icons) {
 		let styledClass = className + " " || ""
 
 		const style = icons[type].style
 
-		if (style) if (style in styles) styledClass += styles[style]
+		if (style) styledClass += style
 
 		return (
 			<button
 				{...rest}
-				className={`graySurface iconButton ${styledClass}`}
-				onClick={onClick}
+				className={`${style ? "" : "cSurface"} iconButton ${styledClass}`}
 				type="submit"
 			>
 				{icons[type].el({ size: 18 })}
@@ -75,5 +62,9 @@ export default function IconButton(props: IconButtonProps) {
 		)
 	}
 
-	return <div className="graySurface iconButton">{children}</div>
+	return (
+		<button className={`cSurface iconButton ${className}`} {...rest}>
+			{children}
+		</button>
+	)
 }
