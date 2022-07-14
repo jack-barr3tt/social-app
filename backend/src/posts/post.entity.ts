@@ -41,32 +41,32 @@ export class PostEditInput {
 export class Post {
     @PrimaryColumn()
     @Field()
-    id!: string
+    id: string
 
     @Column()
     @Field()
-    title!: string
+    title: string
 
     @Column()
     @Field()
-    content!: string
+    content: string
 
     @CreateDateColumn()
     @Field()
-    createdAt!: Date
+    createdAt: Date
 
     @ManyToOne(() => User, (user) => user.posts)
     @JoinColumn()
-    @Field(() => User, { nullable: true })
+    @Field(() => User)
     user: User
 
     @Column()
-    userId!: string
+    userId: string
 
     @ManyToMany(() => User, (user) => user.likedPosts)
     @JoinTable()
     @Field(() => [User])
-    likedBy!: User[]
+    likedBy: User[]
 
     @Field(() => Int)
     get likes() {
@@ -77,7 +77,7 @@ export class Post {
     @Field()
     edited!: boolean
 
-    @BeforeUpdate() 
+    @BeforeUpdate()
     setEdited() {
         this.edited = true
     }
@@ -86,7 +86,6 @@ export class Post {
     generateId() {
         this.id = v4()
     }
-
 }
 
 @ObjectType()

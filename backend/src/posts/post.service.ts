@@ -9,6 +9,9 @@ export class PostService {
     constructor(
         @InjectRepository(Post)
         private repo: Repository<Post>,
+
+        @InjectRepository(User)
+        private userRepo: Repository<User>,
     ) {}
 
     async create(post: PostInput): Promise<Post> {
@@ -23,7 +26,7 @@ export class PostService {
     async get(id: string): Promise<Post> {
         return this.repo.findOne({
             where: { id },
-            relations: { likedBy: true },
+            relations: { likedBy: true, user: true },
         })
     }
 
@@ -49,7 +52,7 @@ export class PostService {
         if (!post) throw new Error('Post not found')
 
         await this.repo.remove(post)
-        return "Post deleted"
+        return 'Post deleted'
     }
 
     async like(userId: string, postId: string): Promise<PostWithoutUsers> {
@@ -74,5 +77,19 @@ export class PostService {
         let temp = await this.repo.save(post)
 
         return temp
+    }
+
+    async getFriendPosts(userId: string): Promise<PostWithoutUsers[]> {
+        const user = await this.userRepo.findOne({
+            where: { id: userId },
+            relations: { friends: true },
+        })
+
+        if (!user) throw new Error('User not found')
+
+        return this.repo.find({
+            where: [...user.friends.map((f) => ({ userId: f.id })), { userId }],
+            relations: { likedBy: true, user: true },
+        })
     }
 }

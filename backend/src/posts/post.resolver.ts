@@ -30,4 +30,9 @@ export class PostResolver {
     post(@Args('id') id: string) {
         return this.postService.get(id)
     }
+
+    @Query(() => [Post])
+    friendPosts(@Args('userId') userId: string) {
+        return this.postService.getFriendPosts(userId)
+    }
 }
