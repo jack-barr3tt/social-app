@@ -41,6 +41,7 @@ export class ChatService {
     async get(id: string, currentUserId: string): Promise<Chat> {
         const user = await this.userRepo.findOne({
             where: { id: currentUserId },
+            relations: { chats: true },
         })
 
         if (!user.chats.some((c) => c.id === id)) return null
