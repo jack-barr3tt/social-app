@@ -18,8 +18,8 @@ export class UserBasic {
     @Field()
     id!: string
 
-    @Field()
-    username!: string
+    @Field({ nullable: true })
+    username: string
 }
 
 @Entity()

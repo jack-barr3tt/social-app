@@ -18,13 +18,12 @@ export class UserResolver {
 
     @Query(() => User, { nullable: true })
     async user(
-        @Context() context,
-        @Args('id', { nullable: true }) id?: string,
+        @Context() context
     ) {
-        return this.userService.get(id)
+        return this.userService.get(context.req.user.id)
     }
 
-    @Query(() => UserBasic)
+    @Query(() => UserBasic, { nullable: true })
     async userById(@Args('id') id: string) {
         return this.userService.getById(id)
     }

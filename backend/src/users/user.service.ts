@@ -11,6 +11,7 @@ export class UserService {
     ) {}
 
     getById(id: string) {
+        if(id.length < 1) return null
         return this.repo.findOne({
             where: { id },
         })
