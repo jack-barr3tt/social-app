@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom"
 import { CREATE_CHAT } from "../GQL/mutations"
 import { FRIENDS } from "../GQL/fragments"
 import { Chat, User } from "../graphql"
-import { useUser } from "../Hooks/useUser"
 import Modal from "./Modal"
 import Title from "./Title"
 import { GET_CHAT_IDS } from "../GQL/queries"
@@ -16,7 +15,6 @@ export default function NewChatModal(props: {
 }) {
 	const { open, setOpen } = props
 
-	const { userId } = useUser()
 	const navigate = useNavigate()
 
 	const {
@@ -26,22 +24,17 @@ export default function NewChatModal(props: {
 	} = useQuery<{ user: User }>(
 		gql`
 			${FRIENDS}
-			query GetUser($userId: String!) {
-				user(id: $userId) {
+			query GetUser {
+				user {
 					id
 					...Friends
 				}
 			}
-		`,
-		{
-			variables: {
-				userId,
-			},
-		}
+		`
 	)
 
 	const refetch = {
-		refetchQueries: [{ query: GET_CHAT_IDS, variables: { id: userId } }],
+		refetchQueries: [{ query: GET_CHAT_IDS }],
 	}
 
 	const [createChat] = useMutation<{ createChat: Chat }>(CREATE_CHAT, refetch)
@@ -65,7 +58,6 @@ export default function NewChatModal(props: {
 
 		const { data } = await createChat({
 			variables: {
-				ownerId: userId,
 				userIds: selected,
 				name,
 			},

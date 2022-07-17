@@ -2,7 +2,6 @@ import { useMutation } from "@apollo/client"
 import { Dispatch, FormEvent, SetStateAction, useState } from "react"
 import { CREATE_POST } from "../GQL/mutations"
 import { GET_FRIENDS_POSTS } from "../GQL/queries"
-import { useUser } from "../Hooks/useUser"
 import IconButton from "./IconButton"
 import Modal from "./Modal"
 import Title from "./Title"
@@ -13,8 +12,6 @@ export default function NewPostModal(props: {
 }) {
 	const { open, setOpen } = props
 
-	const { userId } = useUser()
-
 	const [title, setTitle] = useState("")
 	const [content, setContent] = useState("")
 
@@ -22,10 +19,9 @@ export default function NewPostModal(props: {
 		variables: {
 			title,
 			content,
-			userId,
 		},
 
-		refetchQueries: [{ query: GET_FRIENDS_POSTS, variables: { userId } }],
+		refetchQueries: [{ query: GET_FRIENDS_POSTS }],
 	})
 
 	const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {

@@ -1,11 +1,10 @@
 import { useMutation } from "@apollo/client"
 import { Dispatch, FormEvent, SetStateAction, useEffect, useState } from "react"
-import { client } from "../App"
+import { client } from "../ApolloClient"
 import { POSTS_INFO } from "../GQL/fragments"
 import { EDIT_POST } from "../GQL/mutations"
 import { GET_FRIENDS_POSTS } from "../GQL/queries"
 import { Post } from "../graphql"
-import { useUser } from "../Hooks/useUser"
 import IconButton from "./IconButton"
 import Modal from "./Modal"
 import Title from "./Title"
@@ -16,8 +15,6 @@ export default function EditPostModal(props: {
 	id: string
 }) {
 	const { open, setOpen, id } = props
-
-	const { userId } = useUser()
 
 	const [title, setTitle] = useState<string>()
 	const [content, setContent] = useState<string>()
@@ -33,7 +30,7 @@ export default function EditPostModal(props: {
 			title,
 			content,
 		},
-		refetchQueries: [{ query: GET_FRIENDS_POSTS, variables: { userId } }],
+		refetchQueries: [{ query: GET_FRIENDS_POSTS }],
 	})
 
 	useEffect(() => {

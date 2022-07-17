@@ -6,7 +6,7 @@ import UserControls from "./UserControls"
 export default function SearchResult(props: { id: string }) {
 	const { id } = props
 
-	const { data: { user } = {} } = useQuery<{ user: User }>(USER_NAME, { variables: { id } })
+	const { data: { userById: user } = {} } = useQuery<{ userById: User }>(USER_NAME, { variables: { id } })
 
 	return (
 		<div className="flexRowCenter justify-between px-8 py-2 cBorder lineUnder">

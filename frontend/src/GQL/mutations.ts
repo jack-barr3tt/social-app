@@ -7,8 +7,8 @@ export const DELETE_CHAT = gql`
 `
 
 export const LEAVE_CHAT = gql`
-	mutation LeaveChat($id: String!, $userId: String!) {
-		leaveChat(id: $id, userId: $userId)
+	mutation LeaveChat($id: String!) {
+		leaveChat(id: $id)
 	}
 `
 
@@ -25,19 +25,19 @@ export const EDIT_CHAT_NAME = gql`
 `
 
 export const SEND_FRIEND_REQUEST = gql`
-	mutation SendFriendRequest($senderId: String!, $receiverId: String!) {
-		sendFriendRequest(senderId: $senderId, receiverId: $receiverId)
+	mutation SendFriendRequest($receiverId: String!) {
+		sendFriendRequest(receiverId: $receiverId)
 	}
 `
 export const REMOVE_FRIEND = gql`
-	mutation RemoveFriend($userId: String!, $friendId: String!) {
-		unfriend(userId: $userId, friendId: $friendId)
+	mutation RemoveFriend($friendId: String!) {
+		unfriend(friendId: $friendId)
 	}
 `
 
 export const CREATE_CHAT = gql`
-	mutation CreateChat($ownerId: String!, $userIds: [String!]!, $name: String) {
-		createChat(chat: { ownerId: $ownerId, userIds: $userIds, name: $name }) {
+	mutation CreateChat($userIds: [String!]!, $name: String) {
+		createChat(chat: { userIds: $userIds, name: $name }) {
 			id
 		}
 	}
@@ -62,8 +62,8 @@ export const REVOKE_FRIEND_REQUEST = gql`
 `
 
 export const SEND_MESSAGE = gql`
-	mutation SendMessage($userId: String!, $chatId: String!, $content: String!) {
-		createMessage(message: { userId: $userId, chatId: $chatId, content: $content }) {
+	mutation SendMessage($chatId: String!, $content: String!) {
+		createMessage(message: { chatId: $chatId, content: $content }) {
 			id
 			content
 		}
@@ -71,8 +71,8 @@ export const SEND_MESSAGE = gql`
 `
 
 export const LIKE_POST = gql`
-	mutation LikePost($userId: String!, $postId: String!) {
-		like(userId: $userId, postId: $postId) {
+	mutation LikePost($postId: String!) {
+		like(postId: $postId) {
 			id
 		}
 	}
@@ -93,8 +93,8 @@ export const EDIT_POST = gql`
 `
 
 export const CREATE_POST = gql`
-	mutation CreatePost($userId: String!, $title: String!, $content: String!) {
-		createPost(input: { userId: $userId, title: $title, content: $content }) {
+	mutation CreatePost($title: String!, $content: String!) {
+		createPost(input: { title: $title, content: $content }) {
 			id
 		}
 	}

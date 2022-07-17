@@ -2,20 +2,17 @@ import { useMutation } from "@apollo/client"
 import { useState } from "react"
 import { DELETE_POST } from "../GQL/mutations"
 import { GET_FRIENDS_POSTS } from "../GQL/queries"
-import { useUser } from "../Hooks/useUser"
 import EditPostModal from "./EditPostModal"
 import IconButton from "./IconButton"
 
 export default function PostTools(props: { id: string }) {
 	const { id } = props
 
-	const { userId } = useUser()
-
 	const [editOpen, setEditOpen] = useState(false)
 
 	const [deletePost] = useMutation(DELETE_POST, {
 		variables: { id },
-		refetchQueries: [{ query: GET_FRIENDS_POSTS, variables: { userId } }],
+		refetchQueries: [{ query: GET_FRIENDS_POSTS }],
 	})
 
 	return (

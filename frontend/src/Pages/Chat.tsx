@@ -29,8 +29,6 @@ export default function Chat() {
 		refetchQueries: [{ query: GET_CHAT, variables: { id: id } }],
 	})
 
-	const { userId } = useUser()
-
 	const scrollRef = useRef<HTMLDivElement>(null)
 	const [message, setMessage] = useState("")
 
@@ -41,7 +39,6 @@ export default function Chat() {
 
 		await sendMutation({
 			variables: {
-				userId,
 				chatId: id,
 				content: message,
 			},

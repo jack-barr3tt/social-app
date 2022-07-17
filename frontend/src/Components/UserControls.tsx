@@ -11,18 +11,15 @@ import {
 } from "../GQL/mutations"
 import { USER_SOCIAL } from "../GQL/queries"
 import { Chat, User } from "../graphql"
-import { useUser } from "../Hooks/useUser"
 import IconButton from "./IconButton"
 
 export default function UserControls(props: { id: string }) {
 	const { id } = props
 
-	const { userId } = useUser()
-
 	const navigate = useNavigate()
 
 	const refetch = {
-		refetchQueries: [{ query: USER_SOCIAL, variables: { id: userId } }],
+		refetchQueries: [{ query: USER_SOCIAL }],
 	}
 
 	const [sendFriendRequest] = useMutation(SEND_FRIEND_REQUEST, refetch)
@@ -32,14 +29,11 @@ export default function UserControls(props: { id: string }) {
 	const [revokeRequest] = useMutation(REVOKE_FRIEND_REQUEST, refetch)
 	const [createChat] = useMutation<{ createChat: Chat }>(CREATE_CHAT)
 
-	const { data: { user } = {} } = useQuery<{ user: User }>(USER_SOCIAL, {
-		variables: { id: userId },
-	})
+	const { data: { user } = {} } = useQuery<{ user: User }>(USER_SOCIAL)
 
 	const sendRequest = useCallback(async () => {
 		await sendFriendRequest({
 			variables: {
-				senderId: userId,
 				receiverId: id,
 			},
 		})
@@ -48,7 +42,6 @@ export default function UserControls(props: { id: string }) {
 	const unFriend = useCallback(async () => {
 		await removeFriend({
 			variables: {
-				userId: userId,
 				friendId: id,
 			},
 		})
@@ -65,7 +58,6 @@ export default function UserControls(props: { id: string }) {
 
 		const { data } = await createChat({
 			variables: {
-				ownerId: userId,
 				userIds: [id],
 			},
 		})

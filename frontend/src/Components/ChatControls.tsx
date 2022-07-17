@@ -20,7 +20,7 @@ export default function ChatControls(props: { id: string }) {
 	const [manageOpen, setManageOpen] = useState(false)
 
 	const refetch = {
-		refetchQueries: [{ query: GET_CHAT_IDS, variables: { id: userId } }],
+		refetchQueries: [{ query: GET_CHAT_IDS }],
 	}
 
 	const [deleteChat] = useMutation(DELETE_CHAT, refetch)
@@ -37,7 +37,7 @@ export default function ChatControls(props: { id: string }) {
 	}
 
 	const handleLeave = async () => {
-		await leaveChat({ variables: { id, userId } })
+		await leaveChat({ variables: { id } })
 
 		navigate("/chats")
 	}

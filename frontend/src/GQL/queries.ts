@@ -29,7 +29,7 @@ export const CHAT_OWNER_ID = gql`
 
 export const USER_NAME = gql`
 	query UserName($id: String!) {
-		user(id: $id) {
+		userById(id: $id) {
 			id
 			username
 		}
@@ -41,8 +41,8 @@ export const USER_SOCIAL = gql`
 	${FRIENDS}
 	${FRIEND_REQUESTS}
 	${USER_CHAT_MEMBERS}
-	query GetUser($id: String!) {
-		user(id: $id) {
+	query GetUser {
+		user {
 			id
 			...BasicUserInfo
 			...Friends
@@ -53,8 +53,8 @@ export const USER_SOCIAL = gql`
 `
 
 export const GET_CHAT_IDS = gql`
-	query GetChatIDs($id: String!) {
-		user(id: $id) {
+	query GetChatIDs {
+		user {
 			id
 			chats {
 				id
@@ -98,8 +98,8 @@ export const MESSAGE = gql`
 
 export const GET_FRIENDS_POSTS = gql`
 	${POSTS_INFO}
-	query GetFriendsPosts($userId: String!) {
-		friendPosts(userId: $userId) {
+	query GetFriendsPosts {
+		friendPosts {
 			...PostsInfo
 		}
 	}

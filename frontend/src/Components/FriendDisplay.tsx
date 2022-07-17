@@ -6,7 +6,9 @@ import UserControls from "./UserControls"
 export default function FriendDisplay(props: { id: string }) {
 	const { id } = props
 
-	const { data: { user } = {} } = useQuery<{ user: User }>(USER_NAME, { variables: { id } })
+	const { data: { userById: user } = {} } = useQuery<{ userById: User }>(USER_NAME, {
+		variables: { id },
+	})
 
 	return (
 		<div className="cBorder rounded-lg p-2 pl-8 items-center flexRowBetween bgAccent">

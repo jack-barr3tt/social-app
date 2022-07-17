@@ -3,7 +3,6 @@ import { Dispatch, FormEvent, SetStateAction, useEffect, useState } from "react"
 import { UPDATE_MEMBERS } from "../GQL/mutations"
 import { CHAT_MEMBERS, FRIENDS } from "../GQL/fragments"
 import { Chat, User } from "../graphql"
-import { useUser } from "../Hooks/useUser"
 import Modal from "./Modal"
 import Title from "./Title"
 import IconButton from "./IconButton"
@@ -14,8 +13,6 @@ export default function ManageChatMembersModal(props: {
 	id: string
 }) {
 	const { open, setOpen, id } = props
-
-	const { userId } = useUser()
 
 	const { data: { chat } = {} } = useQuery<{ chat: Chat }>(
 		gql`
@@ -37,18 +34,13 @@ export default function ManageChatMembersModal(props: {
 	const { data: { user } = {} } = useQuery<{ user: User }>(
 		gql`
 			${FRIENDS}
-			query GetUser($userId: String!) {
-				user(id: $userId) {
+			query GetUser {
+				user {
 					id
 					...Friends
 				}
 			}
-		`,
-		{
-			variables: {
-				userId,
-			},
-		}
+		`
 	)
 
 	const [updateMembers] = useMutation(UPDATE_MEMBERS)

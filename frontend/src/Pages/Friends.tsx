@@ -5,16 +5,14 @@ import Title from "../Components/Title"
 import FriendDisplay from "../Components/FriendDisplay"
 
 export default function Friends() {
-	const { userId } = useUser()
-
 	const {
 		data: { user } = {},
 		loading,
 		error,
 	} = useQuery<{ user: UserType }>(
 		gql`
-			query GetUser($id: String!) {
-				user(id: $id) {
+			query GetUser {
+				user {
 					id
 					friends {
 						id
@@ -31,12 +29,7 @@ export default function Friends() {
 					}
 				}
 			}
-		`,
-		{
-			variables: {
-				id: userId,
-			},
-		}
+		`
 	)
 
 	if (!user) return <></>

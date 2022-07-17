@@ -9,18 +9,9 @@ import { User } from "../graphql"
 import { useUser } from "../Hooks/useUser"
 
 export default function Chats() {
-	const { userId } = useUser()
 	const [modalOpen, setModalOpen] = useState(false)
 
-	const {
-		data: { user } = {},
-		error,
-		loading,
-	} = useQuery<{ user: User }>(GET_CHAT_IDS, {
-		variables: {
-			id: userId,
-		},
-	})
+	const { data: { user } = {}, error, loading } = useQuery<{ user: User }>(GET_CHAT_IDS)
 
 	return (
 		<>

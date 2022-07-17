@@ -1,6 +1,6 @@
 import { useMutation } from "@apollo/client"
 import { FiEdit3, FiHeart } from "react-icons/fi"
-import { client } from "../App"
+import { client } from "../ApolloClient"
 import relativeTime from "../Functions/time"
 import { POSTS_INFO } from "../GQL/fragments"
 import { LIKE_POST } from "../GQL/mutations"
@@ -20,7 +20,7 @@ export default function Post(props: { id: string }) {
 	})
 
 	const [likePost] = useMutation(LIKE_POST, {
-		variables: { userId, postId: id },
+		variables: { postId: id },
 		refetchQueries: [{ query: GET_POST_LIKES, variables: { id } }],
 	})
 
