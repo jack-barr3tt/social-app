@@ -99,3 +99,9 @@ export const CREATE_POST = gql`
 		}
 	}
 `
+
+export const SET_USERNAME = gql`
+    mutation SetUsername($username: String!) {
+        setUsername(username: $username)
+    }
+`
