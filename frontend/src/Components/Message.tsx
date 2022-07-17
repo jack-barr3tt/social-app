@@ -18,31 +18,35 @@ export default function Message(props: { id: string; group: boolean; showTime: b
 	const calculateTime = useCallback(() => {
 		if (!message) return ""
 
-		const created = new Date(message.createdAt)
+		const created = new Date(message!.createdAt)
 
 		return relativeTime(created)
-	}, [])
+	}, [message])
 
-	const [time, setTime] = useState(calculateTime())
+	const [time, setTime] = useState<string>()
+
+	useEffect(() => {
+		if (!message) return
+
+		setTime(calculateTime())
+	}, [message])
 
 	useEffect(() => {
 		if (!showTime) return
+
 		const interval = setInterval(() => {
 			setTime(calculateTime())
 		}, 1000)
+
 		return () => clearInterval(interval)
-	}, [])
+	}, [message])
 
 	if (!message) return <></>
 
 	return (
 		<div className={`w-full flex flex-row ${isOwnMessage ? "justify-end" : "justify-start"}`}>
 			<div className={`flex flex-col ${isOwnMessage ? "items-end" : "items-start"}`}>
-				<div
-					className={`p-2 rounded-lg border-2 ${
-						isOwnMessage ? "blue" : "msgGray"
-					}`}
-				>
+				<div className={`p-2 rounded-lg border-2 ${isOwnMessage ? "blue" : "msgGray"}`}>
 					{group && <h4 className="pb-4">{message.user.username}</h4>}
 					<p>{message.content}</p>
 				</div>

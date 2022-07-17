@@ -63,7 +63,7 @@ export default function UserControls(props: { id: string }) {
 		})
 
 		if (data) navigate("/chats/" + data.createChat.id)
-	}, [])
+	}, [user])
 
 	const acceptFriendRequest = useCallback(async () => {
 		if (!user) return
@@ -77,7 +77,7 @@ export default function UserControls(props: { id: string }) {
 				id: request.id,
 			},
 		})
-	}, [])
+	}, [user])
 
 	const rejectFriendRequest = useCallback(async () => {
 		if (!user) return
@@ -91,7 +91,7 @@ export default function UserControls(props: { id: string }) {
 				id: request.id,
 			},
 		})
-	}, [])
+	}, [user])
 
 	const revokeFriendRequest = useCallback(async () => {
 		if (!user) return
@@ -105,7 +105,7 @@ export default function UserControls(props: { id: string }) {
 				id: request.id,
 			},
 		})
-	}, [])
+	}, [user])
 
 	if (!user) return <></>
 

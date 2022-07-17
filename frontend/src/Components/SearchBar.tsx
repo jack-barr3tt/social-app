@@ -51,10 +51,16 @@ export default function SearchBar() {
 						className="absolute w-full rounded-lg cBorder p-4 bgAccent"
 						onBlur={() => setQuery("")}
 					>
-						<div className="cBorder lineOver" />
-						{search.map((result) => (
-							<SearchResult key={result.id} id={result.id} />
-						))}
+						{search.length > 0 ? (
+							<>
+								<div className="cBorder lineOver" />
+								{search.map((result) => (
+									<SearchResult key={result.id} id={result.id} />
+								))}
+							</>
+						) : (
+							<p>No results</p>
+						)}
 					</div>
 				)}
 			</form>

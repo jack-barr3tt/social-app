@@ -61,6 +61,7 @@ export class ChatService {
     async delete(id: string, currentUserId: string): Promise<string> {
         const chat = await this.repo.findOne({
             where: { id },
+            relations: { owner: true },
         })
 
         if (!chat) throw new Error('Chat not found')
@@ -98,7 +99,7 @@ export class ChatService {
     ): Promise<string> {
         const chat = await this.repo.findOne({
             where: { id },
-            relations: { users: true },
+            relations: { users: true, owner: true },
         })
 
         if (!chat) throw new Error('Chat not found')
@@ -119,7 +120,7 @@ export class ChatService {
     ): Promise<string> {
         const chat = await this.repo.findOne({
             where: { id },
-            relations: { users: true },
+            relations: { users: true, owner: true },
         })
 
         if (!chat) throw new Error('Chat not found')

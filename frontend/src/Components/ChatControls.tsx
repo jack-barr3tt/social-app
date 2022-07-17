@@ -51,7 +51,7 @@ export default function ChatControls(props: { id: string }) {
 					<>
 						<IconButton onClick={() => setEditOpen(true)} type="edit" />
 						<IconButton onClick={() => setManageOpen(true)} type="settings" />
-						<IconButton onClick={() => handleDelete} type="delete" />
+						<IconButton onClick={() => handleDelete()} type="delete" />
 					</>
 				) : (
 					<IconButton onClick={() => handleLeave()} type="leave" />
