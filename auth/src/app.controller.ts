@@ -12,6 +12,6 @@ export class AppController {
     @UseGuards(AuthGuard('google'))
     @Redirect()
     googleAuthRedirect(@Req() req) {
-        return { url: `http://localhost:4000/auth?token=${req.user.token}` }
+        return { url: `http://localhost:4000/auth?token=${req.user.token}&id=${req.user.id}` }
     }
 }
