@@ -1,4 +1,4 @@
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql'
+import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql'
 import { Post, PostEditInput, PostInput, PostWithoutUsers } from './post.entity'
 import { PostService } from './post.service'
 
@@ -7,23 +7,27 @@ export class PostResolver {
     constructor(private readonly postService: PostService) {}
 
     @Mutation(() => Post)
-    createPost(@Args('input') input: PostInput) {
-        return this.postService.create(input)
+    createPost(@Args('input') input: PostInput, @Context() context) {
+        return this.postService.create(input, context.req.user.id)
     }
 
     @Mutation(() => PostWithoutUsers)
-    like(@Args('userId') userId: string, @Args('postId') postId: string) {
-        return this.postService.like(userId, postId)
+    like(@Args('postId') postId: string, @Context() context) {
+        return this.postService.like(context.req.user.id, postId)
     }
 
     @Mutation(() => PostWithoutUsers)
-    editPost(@Args('id') id: string, @Args('changes') changes: PostEditInput) {
-        return this.postService.edit(id, changes)
+    editPost(
+        @Args('id') id: string,
+        @Args('changes') changes: PostEditInput,
+        @Context() context,
+    ) {
+        return this.postService.edit(id, changes, context.req.user.id)
     }
 
     @Mutation(() => String)
-    deletePost(@Args('id') id: string) {
-        return this.postService.delete(id)
+    deletePost(@Args('id') id: string, @Context() context) {
+        return this.postService.delete(id, context.req.user.id)
     }
 
     @Query(() => Post, { nullable: true })
@@ -32,7 +36,7 @@ export class PostResolver {
     }
 
     @Query(() => [Post])
-    friendPosts(@Args('userId') userId: string) {
-        return this.postService.getFriendPosts(userId)
+    friendPosts(@Context() context) {
+        return this.postService.getFriendPosts(context.req.user.id)
     }
 }

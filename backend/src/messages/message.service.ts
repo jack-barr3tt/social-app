@@ -10,20 +10,32 @@ export class MessageService {
     constructor(
         @InjectRepository(Message)
         private readonly messageRepository: Repository<Message>,
+        @InjectRepository(Chat)
+        private readonly chatRepo: Repository<Chat>,
     ) {}
 
-    async create(message: MessageInput): Promise<MessageWithoutRels> {
+    async create(
+        message: MessageInput,
+        currentUserId: string,
+    ): Promise<MessageWithoutRels> {
         const newMessage = new Message()
 
         const tempUser = new User()
-        tempUser.id = message.userId
+        tempUser.id = currentUserId
 
-        const tempChat = new Chat()
-        tempChat.id = message.chatId
+        const chat = await this.chatRepo.findOne({
+            where: { id: message.chatId },
+            relations: {
+                users: true,
+            },
+        })
+
+        if (!chat.users.some((u) => u.id === currentUserId))
+            throw new Error('You are not a member of this chat')
 
         newMessage.content = message.content
         newMessage.user = tempUser
-        newMessage.chat = tempChat
+        newMessage.chat = chat
 
         return this.messageRepository.save(newMessage)
     }
@@ -54,6 +66,7 @@ export class MessageService {
 
         if (!deletedMessage) throw new Error('Message not found')
 
+            throw new Error('You are not the owner of this message')
         this.messageRepository.delete({ id })
 
         return 'Message deleted'

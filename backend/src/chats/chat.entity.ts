@@ -20,9 +20,6 @@ export class ChatInput {
     @Field({ nullable: true })
     name: string
 
-    @Field(() => String)
-    ownerId: string
-
     @Field(() => [String])
     userIds: string[]
 }

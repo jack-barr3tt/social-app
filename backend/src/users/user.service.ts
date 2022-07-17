@@ -79,10 +79,11 @@ export class UserService {
         return 'Successfully unfriended'
     }
 
-    search(query: string) {
+    search(query: string, currentUserId: string) {
         return this.repo.find({
             where: {
-                username: Like(`%${query}%`)
+                username: Like(`%${query}%`),
+                id: Not(currentUserId),
             },
         })
     }

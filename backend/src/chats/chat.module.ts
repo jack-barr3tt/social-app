@@ -6,10 +6,7 @@ import { ChatResolver } from './chat.resolver'
 import { ChatService } from './chat.service'
 
 @Module({
-    imports: [
-        TypeOrmModule.forFeature([Chat]),
-        TypeOrmModule.forFeature([User]),
-    ],
+    imports: [TypeOrmModule.forFeature([Chat, User])],
     providers: [ChatService, ChatResolver],
 })
 export class ChatModule {}

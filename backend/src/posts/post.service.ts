@@ -14,11 +14,11 @@ export class PostService {
         private userRepo: Repository<User>,
     ) {}
 
-    async create(post: PostInput): Promise<Post> {
+    async create(post: PostInput, userId: string): Promise<Post> {
         const newPost = new Post()
         newPost.title = post.title
         newPost.content = post.content
-        newPost.userId = post.userId
+        newPost.userId = userId
 
         return this.repo.save(newPost)
     }
@@ -30,11 +30,14 @@ export class PostService {
         })
     }
 
-    async edit(id: string, changes: PostEditInput) {
+    async edit(id: string, changes: PostEditInput, currentUserId: string) {
         const post = await this.repo.findOne({
             where: { id },
             relations: { likedBy: true },
         })
+
+        if (post.userId !== currentUserId)
+            throw new Error('You are not the owner of this post')
 
         if (!post) throw new Error('Post not found')
 
@@ -44,12 +47,15 @@ export class PostService {
         return this.repo.save(post)
     }
 
-    async delete(id: string) {
+    async delete(id: string, currentUserId: string) {
         const post = await this.repo.findOne({
             where: { id },
         })
 
         if (!post) throw new Error('Post not found')
+
+        if (post.userId !== currentUserId)
+            throw new Error('You are not the owner of this post')
 
         await this.repo.remove(post)
         return 'Post deleted'

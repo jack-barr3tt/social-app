@@ -2,7 +2,6 @@ import { Field, InputType, Int, ObjectType } from '@nestjs/graphql'
 import { CASCADE } from 'src/cascade'
 import { User } from 'src/users/user.entity'
 import {
-    AfterUpdate,
     BeforeInsert,
     BeforeUpdate,
     Column,
@@ -23,9 +22,6 @@ export class PostInput {
 
     @Field()
     content: string
-
-    @Field()
-    userId: string
 }
 
 @InputType()

@@ -1,10 +1,10 @@
+import { Field, ObjectType } from '@nestjs/graphql'
 import { CASCADE } from 'src/cascade'
 import { Chat } from 'src/chats/chat.entity'
 import { FriendRequest } from 'src/friendrequests/request.entity'
 import { Message } from 'src/messages/message.entity'
 import { Post } from 'src/posts/post.entity'
 import {
-    BeforeInsert,
     Column,
     Entity,
     JoinTable,
@@ -12,18 +12,14 @@ import {
     OneToMany,
     PrimaryColumn,
 } from 'typeorm'
-import { v4 } from 'uuid'
 
-@InputType()
-export class UserInput {
+@ObjectType()
+export class UserBasic {
     @Field()
-    username: string
-
-    @Field()
-    email: string
+    id!: string
 
     @Field()
-    password: string
+    username!: string
 }
 
 @Entity()
@@ -33,16 +29,12 @@ export class User {
     @Field(() => String)
     id!: string
 
-    @Column({ length: 100 })
-    @Field(() => String)
-    username!: string
+    @Column({ default: 'e' })
+    googleId: string
 
-    @Column({ length: 300 })
+    @Column({ length: 100, unique: true, nullable: true })
     @Field(() => String)
-    email!: string
-
-    @Column()
-    hash!: string
+    username: string
 
     @OneToMany(() => Post, (post) => post.user)
     @Field(() => [Post])
@@ -56,7 +48,7 @@ export class User {
     @Field(() => [Chat])
     chats: Chat[]
 
-    @OneToMany(() => Chat, chat => chat.owner)
+    @OneToMany(() => Chat, (chat) => chat.owner)
     @Field(() => [Chat])
     ownedChats: Chat[]
 
@@ -69,16 +61,11 @@ export class User {
     @Field(() => [User])
     friends: User[]
 
-    @OneToMany(() => FriendRequest, request => request.sender)
+    @OneToMany(() => FriendRequest, (request) => request.sender)
     @Field(() => [FriendRequest])
     sentFriendRequests: FriendRequest[]
 
-    @OneToMany(() => FriendRequest, request => request.receiver)
+    @OneToMany(() => FriendRequest, (request) => request.receiver)
     @Field(() => [FriendRequest])
     receivedFriendRequests: FriendRequest[]
-
-    @BeforeInsert()
-    generateId() {
-        this.id = v4()
-    }
 }

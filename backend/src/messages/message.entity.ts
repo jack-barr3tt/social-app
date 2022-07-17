@@ -21,9 +21,6 @@ export class MessageInput {
 
     @Field()
     chatId: string
-
-    @Field()
-    userId: string
 }
 
 @ObjectType()

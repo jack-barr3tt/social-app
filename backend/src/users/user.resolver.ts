@@ -1,4 +1,4 @@
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql'
+import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql'
 import { User, UserInput } from './user.entity'
 import { UserService } from './user.service'
 
@@ -12,8 +12,8 @@ export class UserResolver {
     }
 
     @Mutation(() => String)
-    async unfriend(@Args('userId') userId: string, @Args('friendId') friendId: string) {
-        return this.userService.unfriend(userId, friendId)
+    async unfriend(@Args('friendId') friendId: string, @Context() context) {
+        return this.userService.unfriend(context.req.user.id, friendId)
     }
 
     @Query(() => User, { nullable: true })
@@ -22,7 +22,7 @@ export class UserResolver {
     }
 
     @Query(() => [User])
-    async search(@Args('query') query: string) {
-        return this.userService.search(query)
+    async search(@Args('query') query: string, @Context() context) {
+        return this.userService.search(query, context.req.user.id)
     }
 }

@@ -13,9 +13,9 @@ export class ChatService {
         private userRepo: Repository<User>,
     ) {}
 
-    async create(chat: ChatInput): Promise<ChatWithoutUsers> {
+    async create(chat: ChatInput, ownerId: string): Promise<ChatWithoutUsers> {
         const owner = await this.userRepo.findOne({
-            where: { id: chat.ownerId },
+            where: { id: ownerId },
         })
 
         const members = await Promise.all(
@@ -51,12 +51,15 @@ export class ChatService {
         })
     }
 
-    async delete(id: string): Promise<string> {
+    async delete(id: string, currentUserId: string): Promise<string> {
         const chat = await this.repo.findOne({
             where: { id },
         })
 
         if (!chat) throw new Error('Chat not found')
+
+        if (chat.owner.id !== currentUserId)
+            throw new Error('User does not own this chat')
 
         await this.repo.delete({ id })
 
@@ -81,13 +84,20 @@ export class ChatService {
         return 'User left chat'
     }
 
-    async rename(id: string, name: string): Promise<string> {
+    async rename(
+        id: string,
+        name: string,
+        currentUserId: string,
+    ): Promise<string> {
         const chat = await this.repo.findOne({
             where: { id },
             relations: { users: true },
         })
 
         if (!chat) throw new Error('Chat not found')
+        if (chat.owner.id !== currentUserId)
+            throw new Error('User does not own this chat')
+
         chat.name = name
 
         await this.repo.save(chat)
@@ -95,13 +105,20 @@ export class ChatService {
         return 'Renamed chat'
     }
 
-    async editMembers(id: string, userIds: string[]): Promise<string> {
+    async editMembers(
+        id: string,
+        userIds: string[],
+        currentUserId: string,
+    ): Promise<string> {
         const chat = await this.repo.findOne({
             where: { id },
             relations: { users: true },
         })
 
         if (!chat) throw new Error('Chat not found')
+
+        if (chat.owner.id !== currentUserId)
+            throw new Error('User does not own this chat')
 
         const members = await Promise.all(
             userIds.map((userId) => {

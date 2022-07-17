@@ -75,7 +75,10 @@ export class FriendRequestService {
         return 'Friend request sent'
     }
 
-    async acceptFriendRequest(id: string): Promise<string> {
+    async acceptFriendRequest(
+        id: string,
+        currentUserId: string,
+    ): Promise<string> {
         const request = await this.repo.findOne({
             where: { id },
             relations: {
@@ -88,9 +91,10 @@ export class FriendRequestService {
             },
         })
 
-        if (!request) {
-            throw new Error('Friend request not found')
-        }
+        if (!request) throw new Error('Friend request not found')
+
+        if (request.receiver.id !== currentUserId)
+            throw new Error("This request wasn't send to you")
 
         request.receiver.friends.push(request.sender)
         request.sender.friends.push(request.receiver)
@@ -104,28 +108,36 @@ export class FriendRequestService {
         return 'Friend request accepted'
     }
 
-    async rejectFriendRequest(id: string): Promise<string> {
+    async rejectFriendRequest(
+        id: string,
+        currentUserId: string,
+    ): Promise<string> {
         const request = await this.repo.findOne({
             where: { id },
         })
 
-        if (!request) {
-            throw new Error('Friend request not found')
-        }
+        if (!request) throw new Error('Friend request not found')
+
+        if (request.receiver.id !== currentUserId)
+            throw new Error("This request wasn't send to you")
 
         await this.repo.remove(request)
 
         return 'Friend request rejected'
     }
 
-    async revokeFriendRequest(id: string): Promise<string> {
+    async revokeFriendRequest(
+        id: string,
+        currentUserId: string,
+    ): Promise<string> {
         const request = await this.repo.findOne({
             where: { id },
         })
 
-        if (!request) {
-            throw new Error('Friend request not found')
-        }
+        if (!request) throw new Error('Friend request not found')
+
+        if (request.sender.id !== currentUserId)
+            throw new Error("This request wasn't sent by you")
 
         await this.repo.remove(request)
 
