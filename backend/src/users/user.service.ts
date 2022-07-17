@@ -1,8 +1,7 @@
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { Repository, Like } from 'typeorm'
-import { User, UserInput } from './user.entity'
-import { hash } from 'bcrypt'
+import { Repository, Like, Not } from 'typeorm'
+import { User } from './user.entity'
 
 @Injectable()
 export class UserService {
@@ -11,17 +10,10 @@ export class UserService {
         private repo: Repository<User>,
     ) {}
 
-    async create(user: UserInput): Promise<User> {
-        try {
-            const newUser = new User()
-            newUser.email = user.email
-            newUser.username = user.username
-            newUser.hash = await hash(user.password, 10)
-
-            return this.repo.save(newUser)
-        } catch {
-            throw new Error('Error creating user')
-        }
+    getById(id: string) {
+        return this.repo.findOne({
+            where: { id },
+        })
     }
 
     get(id: string): Promise<User> {
@@ -31,17 +23,17 @@ export class UserService {
                 posts: true,
                 chats: {
                     users: true,
-                    owner: true
+                    owner: true,
                 },
                 messages: true,
                 friends: true,
                 sentFriendRequests: {
                     sender: true,
-                    receiver: true
+                    receiver: true,
                 },
                 receivedFriendRequests: {
                     sender: true,
-                    receiver: true
+                    receiver: true,
                 },
             },
         })
@@ -86,5 +78,21 @@ export class UserService {
                 id: Not(currentUserId),
             },
         })
+    }
+
+    async setUsername(id: string, username: string) {
+        const user = await this.repo.findOne({
+            where: { id },
+        })
+
+        if (!user) {
+            throw new Error('User not found')
+        }
+
+        user.username = username
+
+        await this.repo.save(user)
+
+        return 'Successfully updated username'
     }
 }

@@ -1,14 +1,14 @@
 import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql'
-import { User, UserInput } from './user.entity'
+import { User, UserBasic } from './user.entity'
 import { UserService } from './user.service'
 
 @Resolver()
 export class UserResolver {
     constructor(private readonly userService: UserService) {}
 
-    @Mutation(() => User)
-    async createUser(@Args('input') input: UserInput) {
-        return this.userService.create(input)
+    @Mutation(() => String)
+    async setUsername(@Args('username') username: string, @Context() context) {
+        return this.userService.setUsername(context.req.user.id, username)
     }
 
     @Mutation(() => String)
@@ -17,8 +17,16 @@ export class UserResolver {
     }
 
     @Query(() => User, { nullable: true })
-    async user(@Args('id') id: string) {
+    async user(
+        @Context() context,
+        @Args('id', { nullable: true }) id?: string,
+    ) {
         return this.userService.get(id)
+    }
+
+    @Query(() => UserBasic)
+    async userById(@Args('id') id: string) {
+        return this.userService.getById(id)
     }
 
     @Query(() => [User])

@@ -53,7 +53,7 @@ export class ChatResolver {
     }
 
     @Query(() => Chat, { nullable: true })
-    async chat(@Args('id') id: string): Promise<Chat> {
-        return this.chatService.get(id)
+    async chat(@Args('id') id: string, @Context() context): Promise<Chat> {
+        return this.chatService.get(id, context.req.user.id)
     }
 }

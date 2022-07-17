@@ -52,6 +52,9 @@ export class Message {
     @Field(() => Chat)
     chat: Chat
 
+    @Column()
+    chatId: string
+
     @BeforeUpdate()
     setEdited() {
         this.edited = true

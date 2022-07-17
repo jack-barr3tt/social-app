@@ -31,8 +31,8 @@ export class PostResolver {
     }
 
     @Query(() => Post, { nullable: true })
-    post(@Args('id') id: string) {
-        return this.postService.get(id)
+    post(@Args('id') id: string, @Context() context) {
+        return this.postService.get(id, context.req.user.id)
     }
 
     @Query(() => [Post])

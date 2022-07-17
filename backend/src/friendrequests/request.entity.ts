@@ -1,7 +1,13 @@
 import { Field, ObjectType } from '@nestjs/graphql'
 import { CASCADE } from 'src/cascade'
 import { User } from 'src/users/user.entity'
-import { BeforeInsert, Entity, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm'
+import {
+    BeforeInsert,
+    Entity,
+    JoinColumn,
+    ManyToOne,
+    PrimaryColumn,
+} from 'typeorm'
 import { v4 } from 'uuid'
 
 @Entity()

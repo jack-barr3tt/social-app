@@ -23,9 +23,14 @@ export class PostService {
         return this.repo.save(newPost)
     }
 
-    async get(id: string): Promise<Post> {
+    async get(id: string, currentUserId: string): Promise<Post> {
+        const user = await this.userRepo.findOne({
+            where: { id: currentUserId },
+            relations: { friends: true },
+        })
+
         return this.repo.findOne({
-            where: { id },
+            where: [user, ...user.friends].map((u) => ({ id, userId: u.id })),
             relations: { likedBy: true, user: true },
         })
     }

@@ -32,7 +32,10 @@ export class MessageResolver {
     }
 
     @Query(() => Message, { nullable: true })
-    async message(@Args('id') id: string): Promise<Message> {
-        return this.messageService.get(id)
+    async message(
+        @Args('id') id: string,
+        @Context() context,
+    ): Promise<Message> {
+        return this.messageService.get(id, context.req.user.id)
     }
 }

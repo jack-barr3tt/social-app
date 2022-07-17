@@ -38,7 +38,13 @@ export class ChatService {
         return this.repo.save(newChat)
     }
 
-    async get(id: string): Promise<Chat> {
+    async get(id: string, currentUserId: string): Promise<Chat> {
+        const user = await this.userRepo.findOne({
+            where: { id: currentUserId },
+        })
+
+        if (!user.chats.some((c) => c.id === id)) return null
+
         return this.repo.findOne({
             where: { id },
             relations: {

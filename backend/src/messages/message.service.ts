@@ -12,6 +12,8 @@ export class MessageService {
         private readonly messageRepository: Repository<Message>,
         @InjectRepository(Chat)
         private readonly chatRepo: Repository<Chat>,
+        @InjectRepository(User)
+        private readonly userRepository: Repository<User>,
     ) {}
 
     async create(
@@ -40,25 +42,41 @@ export class MessageService {
         return this.messageRepository.save(newMessage)
     }
 
-    async get(id: string): Promise<Message> {
+    async get(id: string, currentUserId: string): Promise<Message> {
+        const user = await this.userRepository.findOne({
+            where: { id: currentUserId },
+            relations: { chats: true },
+        })
+
+        if (user.chats.length === 0) return null
+
         return this.messageRepository.findOne({
-            where: { id },
+            where: user.chats.map((c) => ({ id, chatId: c.id })),
             relations: { chat: true, user: true },
         })
     }
 
-    async edit(id: string, newContent: string): Promise<Message> {
+    async edit(
+        id: string,
+        newContent: string,
+        currentUserId: string,
+    ): Promise<Message> {
         const editedMessage = await this.messageRepository.findOne({
             where: { id },
             relations: { chat: true, user: true },
         })
+
+        if (!editedMessage) throw new Error('Message not found')
+
+        if (editedMessage.user.id !== currentUserId)
+            throw new Error('You are not the owner of this message')
 
         editedMessage.content = newContent
 
         return this.messageRepository.save(editedMessage)
     }
 
-    async delete(id: string): Promise<string> {
+    async delete(id: string, currentUserId: string): Promise<string> {
         const deletedMessage = await this.messageRepository.findOne({
             where: { id },
             relations: { chat: true, user: true },
@@ -66,7 +84,9 @@ export class MessageService {
 
         if (!deletedMessage) throw new Error('Message not found')
 
+        if (deletedMessage.user.id !== currentUserId)
             throw new Error('You are not the owner of this message')
+
         this.messageRepository.delete({ id })
 
         return 'Message deleted'
