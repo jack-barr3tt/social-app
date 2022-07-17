@@ -1,4 +1,5 @@
 import { Field, InputType, ObjectType } from '@nestjs/graphql'
+import { CASCADE } from 'src/cascade'
 import { Chat } from 'src/chats/chat.entity'
 import { User } from 'src/users/user.entity'
 import {
@@ -44,12 +45,12 @@ export class Message {
     @Field()
     createdAt: Date
 
-    @ManyToOne(() => User, (user) => user.messages)
+    @ManyToOne(() => User, (user) => user.messages, CASCADE)
     @JoinColumn()
     @Field(() => User)
     user: User
 
-    @ManyToOne(() => Chat, (chat) => chat.messages, { onDelete: "CASCADE" })
+    @ManyToOne(() => Chat, (chat) => chat.messages, CASCADE)
     @JoinColumn()
     @Field(() => Chat)
     chat: Chat

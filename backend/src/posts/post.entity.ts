@@ -1,4 +1,5 @@
 import { Field, InputType, Int, ObjectType } from '@nestjs/graphql'
+import { CASCADE } from 'src/cascade'
 import { User } from 'src/users/user.entity'
 import {
     AfterUpdate,
@@ -55,7 +56,7 @@ export class Post {
     @Field()
     createdAt: Date
 
-    @ManyToOne(() => User, (user) => user.posts)
+    @ManyToOne(() => User, (user) => user.posts, CASCADE)
     @JoinColumn()
     @Field(() => User)
     user: User

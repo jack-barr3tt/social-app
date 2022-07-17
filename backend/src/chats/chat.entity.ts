@@ -1,4 +1,5 @@
 import { Field, InputType, ObjectType } from '@nestjs/graphql'
+import { CASCADE } from 'src/cascade'
 import { Message } from 'src/messages/message.entity'
 import { User } from 'src/users/user.entity'
 import {
@@ -54,7 +55,7 @@ export class Chat {
     @Field(() => [User])
     users: User[]
 
-    @ManyToOne(() => User, (user) => user.ownedChats)
+    @ManyToOne(() => User, (user) => user.ownedChats, CASCADE)
     @JoinColumn()
     @Field(() => User)
     owner: User

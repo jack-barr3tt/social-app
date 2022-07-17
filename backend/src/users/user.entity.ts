@@ -1,4 +1,4 @@
-import { Field, InputType, ObjectType } from '@nestjs/graphql'
+import { CASCADE } from 'src/cascade'
 import { Chat } from 'src/chats/chat.entity'
 import { FriendRequest } from 'src/friendrequests/request.entity'
 import { Message } from 'src/messages/message.entity'
@@ -48,11 +48,11 @@ export class User {
     @Field(() => [Post])
     posts: Post[]
 
-    @ManyToMany(() => Post, (post) => post.likedBy)
+    @ManyToMany(() => Post, (post) => post.likedBy, CASCADE)
     @Field(() => [Post])
     likedPosts: Post[]
 
-    @ManyToMany(() => Chat, (chat) => chat.users)
+    @ManyToMany(() => Chat, (chat) => chat.users, CASCADE)
     @Field(() => [Chat])
     chats: Chat[]
 
@@ -64,7 +64,7 @@ export class User {
     @Field(() => [Message])
     messages: Message[]
 
-    @ManyToMany(() => User, (user) => user.friends)
+    @ManyToMany(() => User, (user) => user.friends, CASCADE)
     @JoinTable()
     @Field(() => [User])
     friends: User[]

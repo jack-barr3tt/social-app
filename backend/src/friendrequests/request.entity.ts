@@ -1,4 +1,5 @@
 import { Field, ObjectType } from '@nestjs/graphql'
+import { CASCADE } from 'src/cascade'
 import { User } from 'src/users/user.entity'
 import { BeforeInsert, Entity, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm'
 import { v4 } from 'uuid'
@@ -10,12 +11,12 @@ export class FriendRequest {
     @Field(() => String)
     id!: string
 
-    @ManyToOne(() => User, (user) => user.sentFriendRequests)
+    @ManyToOne(() => User, (user) => user.sentFriendRequests, CASCADE)
     @JoinColumn()
     @Field(() => User)
     sender!: User
 
-    @ManyToOne(() => User, (user) => user.receivedFriendRequests)
+    @ManyToOne(() => User, (user) => user.receivedFriendRequests, CASCADE)
     @JoinColumn()
     @Field(() => User)
     receiver!: User
