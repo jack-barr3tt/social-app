@@ -9,7 +9,7 @@ import { FriendRequestModule } from './friendrequests/request.module'
 import { MessageModule } from './messages/message.module'
 import { PostModule } from './posts/post.module'
 import { UserModule } from './users/user.module'
-import { AuthModule } from './auth/auth.module';
+import { AuthModule } from './auth/auth.module'
 import { JwtGuard } from './auth/jwt.guard'
 
 @Module({

@@ -38,13 +38,14 @@ export default function NewPostModal(props: {
 		<Modal open={open} setOpen={setOpen}>
 			<Title>New Post</Title>
 			<form onSubmit={handleSubmit} className="formFlex">
-				<input className="input" value={title} onChange={(e) => setTitle(e.target.value)} />
+				<input placeholder="Title" className="input" value={title} onChange={(e) => setTitle(e.target.value)} />
 				<textarea
-					className="input"
+          placeholder="Content"
+					className="input h-32"
 					value={content}
 					onChange={(e) => setContent(e.target.value)}
 				/>
-				<IconButton type="done" className="self-end" />
+				<IconButton type="done" className="self-end disabled:dark-gray disabled:hover:scale-100" disabled={title.length < 1 || content.length < 1} />
 			</form>
 		</Modal>
 	)
